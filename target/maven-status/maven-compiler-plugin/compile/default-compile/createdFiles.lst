@@ -1,0 +1,14 @@
+com/mycompany/service/NutricaoService$1.class
+com/mycompany/repository/EquinoRepository.class
+com/mycompany/domain/Consumo.class
+com/mycompany/domain/TipoAlimento.class
+com/mycompany/repository/ConsumoRepository.class
+com/mycompany/domain/DiagnosticoNutricional.class
+com/mycompany/domain/Equino.class
+com/mycompany/domain/Alimento.class
+com/mycompany/repository/AlimentoRepository.class
+com/mycompany/controller/NutriEquiController.class
+com/mycompany/nutriequi/NutriEqui.class
+com/mycompany/service/NutricaoService.class
+com/mycompany/domain/CategoriaFisiologica.class
+com/mycompany/repository/JpaUtil.class
