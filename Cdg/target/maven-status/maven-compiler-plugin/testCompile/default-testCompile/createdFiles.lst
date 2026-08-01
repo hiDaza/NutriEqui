@@ -1,2 +1,4 @@
-com/mycompany/ui/RegistrarConsumoTest.class
+UIFlowTestLauncher.class
+RegistrarConsumoTest.class
+UITestLauncher.class
 TestePersistencia.class

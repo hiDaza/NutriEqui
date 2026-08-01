@@ -8,24 +8,50 @@ package com.mycompany.ui;
  *
  * @author daza
  */
+
+
 import com.mycompany.controller.EquinoController;
 import com.mycompany.domain.CategoriaFisiologica;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
 
 public class CadastrarEquinoPanel extends JPanel {
 
     private final EquinoController equinoController;
+    private MainFrame mainFrame;
 
     private JTextField txtNome;
     private JTextField txtPeso;
+    private JSlider sliderScore;
+    private JLabel lblScoreValor;
     private JComboBox<CategoriaFisiologica> cbCategoria;
     private JButton btnCadastrar;
     private JLabel lblMensagem;
 
+    
+    public void setMainFrame(MainFrame mainFrame){
+        this.mainFrame = mainFrame;
+    }
+    
+    
     public CadastrarEquinoPanel() {
-        this.equinoController = new EquinoController();
+        this.equinoController = new EquinoController(); //iniciando controlador aqui e nenhum lugar mais
         initComponents();
     }
 
@@ -47,8 +73,7 @@ public class CadastrarEquinoPanel extends JPanel {
         gbc.gridy = 0;
         add(titulo, gbc);
 
-        // Sub
-        JLabel subtitulo = new JLabel("Cadastre um novo cavalo no sistema");
+        JLabel subtitulo = new JLabel("Preencha os dados do cavalo para cadastrá-lo no sistema");
         subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         subtitulo.setForeground(new Color(100, 120, 140));
         gbc.gridy++;
@@ -66,13 +91,8 @@ public class CadastrarEquinoPanel extends JPanel {
 
         gbc.gridx = 1;
         txtNome = new JTextField();
-        txtNome.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtNome.setPreferredSize(new Dimension(250, 35));
-        txtNome.setBackground(Color.WHITE);
-        txtNome.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        txtNome.setToolTipText("Digite o nome do cavalo");
+        estilizarCampo(txtNome);
         add(txtNome, gbc);
 
         // Peso
@@ -85,14 +105,43 @@ public class CadastrarEquinoPanel extends JPanel {
 
         gbc.gridx = 1;
         txtPeso = new JTextField();
-        txtPeso.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtPeso.setPreferredSize(new Dimension(150, 35));
-        txtPeso.setBackground(Color.WHITE);
-        txtPeso.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        txtPeso.setToolTipText("Digite o peso estimado em quilogramas");
+        estilizarCampo(txtPeso);
+        txtPeso.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                validarPeso();
+            }
+        });
         add(txtPeso, gbc);
+
+        // score Corporal agora com slider
+        //
+        gbc.gridy++;
+        gbc.gridx = 0;
+        JLabel lblScore = new JLabel("Score Corporal (1-9)");
+        lblScore.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblScore.setForeground(new Color(40, 60, 80));
+        add(lblScore, gbc);
+
+        gbc.gridx = 1;
+        JPanel panelSlider = new JPanel(new BorderLayout(10, 0));
+        panelSlider.setOpaque(false);
+        sliderScore = new JSlider(1, 9, 5);
+        sliderScore.setMajorTickSpacing(2);
+        sliderScore.setMinorTickSpacing(1);
+        sliderScore.setPaintTicks(true);
+        sliderScore.setPaintLabels(true);
+        sliderScore.setSnapToTicks(true);
+        sliderScore.setToolTipText("1 = Muito magro, 9 = Muito obeso");
+        sliderScore.addChangeListener((ChangeEvent e) -> {
+            lblScoreValor.setText(String.valueOf(sliderScore.getValue()));
+        });
+        panelSlider.add(sliderScore, BorderLayout.CENTER);
+        lblScoreValor = new JLabel("5");
+        lblScoreValor.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblScoreValor.setForeground(new Color(0, 150, 136));
+        panelSlider.add(lblScoreValor, BorderLayout.EAST);
+        add(panelSlider, gbc);
 
         // Categoria
         gbc.gridy++;
@@ -104,26 +153,16 @@ public class CadastrarEquinoPanel extends JPanel {
 
         gbc.gridx = 1;
         cbCategoria = new JComboBox<>(CategoriaFisiologica.values());
-        cbCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        cbCategoria.setBackground(Color.WHITE);
-        cbCategoria.setPreferredSize(new Dimension(250, 35));
-        cbCategoria.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        cbCategoria.setToolTipText("Selecione a categoria que melhor descreve o cavalo");
+        estilizarCombo(cbCategoria);
         add(cbCategoria, gbc);
 
         // Botão
         gbc.gridy++;
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.EAST;
-        btnCadastrar = new JButton("✔ Cadastrar Equino");
-        btnCadastrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnCadastrar.setBackground(new Color(0, 150, 136));
-        btnCadastrar.setForeground(Color.WHITE);
-        btnCadastrar.setFocusPainted(false);
-        btnCadastrar.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
-        btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrar = new JButton("Cadastrar Equino");
+        estilizarBotao(btnCadastrar);
         btnCadastrar.addActionListener(e -> cadastrar());
         add(btnCadastrar, gbc);
 
@@ -139,17 +178,73 @@ public class CadastrarEquinoPanel extends JPanel {
         add(lblMensagem, gbc);
     }
 
+    private void estilizarCampo(JTextField campo) {
+        campo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        campo.setPreferredSize(new Dimension(250, 35));
+        campo.setBackground(Color.WHITE);
+        campo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
+    private void estilizarCombo(JComboBox<?> combo) {
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        combo.setBackground(Color.WHITE);
+        combo.setPreferredSize(new Dimension(250, 35));
+        combo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
+    private void estilizarBotao(JButton botao) {
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botao.setBackground(new Color(0, 150, 136));
+        botao.setForeground(Color.WHITE);
+        botao.setFocusPainted(false);
+        botao.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    private void validarPeso() {
+        String pesoStr = txtPeso.getText().trim();
+        if (!pesoStr.isEmpty()) {
+            try {
+                double peso = Double.parseDouble(pesoStr);
+                if (peso <= 0) {
+                    txtPeso.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(Color.RED, 1, true),
+                            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                    ));
+                } else {
+                    txtPeso.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(new Color(0, 150, 136), 1, true),
+                            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                    ));
+                }
+            } catch (NumberFormatException e) {
+                txtPeso.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.RED, 1, true),
+                        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                ));
+            }
+        }
+    }
+
     private void cadastrar() {
-        lblMensagem.setText(" ");
+        lblMensagem.setText("");
         String nome = txtNome.getText().trim();
         String pesoStr = txtPeso.getText().trim();
 
         if (nome.isEmpty()) {
             exibirMensagem("Informe o nome do equino.", Color.RED);
+            txtNome.requestFocus();
             return;
         }
         if (pesoStr.isEmpty()) {
             exibirMensagem("Informe o peso.", Color.RED);
+            txtPeso.requestFocus();
             return;
         }
 
@@ -157,27 +252,39 @@ public class CadastrarEquinoPanel extends JPanel {
         try {
             peso = Double.parseDouble(pesoStr);
         } catch (NumberFormatException e) {
-            exibirMensagem("Peso inválido (use números).", Color.RED);
+            exibirMensagem("Peso inválido!. Use números).", Color.RED);
+            txtPeso.requestFocus();
             return;
         }
 
         if (peso <= 0) {
             exibirMensagem("Peso deve ser maior que zero.", Color.RED);
+            txtPeso.requestFocus();
             return;
         }
 
-        int escore = 3; // Valor padrão TROCAR DEPOIS CONFORME EVOLUIR OS CONTROLLERS
+        int score = sliderScore.getValue();
         CategoriaFisiologica categoria = (CategoriaFisiologica) cbCategoria.getSelectedItem();
 
-        String resultado = equinoController.cadastrarEquino(nome, peso, escore, categoria);
+        String resultado = equinoController.cadastrarEquino(nome, peso, score, categoria);
 
         if (resultado.startsWith("Erro")) {
-            exibirMensagem(" " + resultado, Color.RED);
+            exibirMensagem("" + resultado, Color.RED);
         } else {
             exibirMensagem("✅ " + resultado, new Color(0, 150, 136));
+            // Limpa campos
             txtNome.setText("");
             txtPeso.setText("");
+            sliderScore.setValue(5);
             cbCategoria.setSelectedIndex(0);
+            if(mainFrame != null){
+                mainFrame.atualizarDados();
+            }
+            // Restaura borda padrão
+            txtPeso.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+            ));
         }
     }
 

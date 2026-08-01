@@ -21,11 +21,11 @@ public class EquinoController {
         this.equinoRepository = new EquinoRepository();
     }
 
-    public String cadastrarEquino(String nome, double peso, int escore, CategoriaFisiologica categoria) {
+    public String cadastrarEquino(String nome, double peso, int score, CategoriaFisiologica categoria) {
         if (equinoRepository.buscarPorNome(nome) != null) {
             return "Erro: Já existe um equino com este nome.";
         }
-        Equino equino = new Equino(nome, peso, escore, categoria);
+        Equino equino = new Equino(nome, peso, score, categoria);
         equinoRepository.salvar(equino);
         return "Equino cadastrado com sucesso! ID: " + equino.getId();
     }

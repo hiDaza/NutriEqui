@@ -10,27 +10,40 @@ package com.mycompany.ui;
  */
 
 import com.mycompany.controller.ConsumoController;
+import com.mycompany.domain.Equino;
+import com.mycompany.domain.Alimento;
+import com.mycompany.repository.EquinoRepository;
+import com.mycompany.repository.AlimentoRepository;
 import java.awt.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class RegistrarConsumoPanel extends JPanel {
 
     private final ConsumoController consumoController;
+    private final EquinoRepository equinoRepository;
+    private final AlimentoRepository alimentoRepository;
 
-    private JTextField txtNomeEquino;
-    private JTextField txtNomeAlimento;
+    private JComboBox<String> cbEquinos;
+    private JComboBox<String> cbAlimentos;
     private JTextField txtQuantidade;
     private JButton btnRegistrar;
     private JLabel lblMensagem;
+    private JLabel lblInfoEquino;
 
     public RegistrarConsumoPanel() {
         this.consumoController = new ConsumoController();
+        this.equinoRepository = new EquinoRepository();
+        this.alimentoRepository = new AlimentoRepository();
         initComponents();
+        carregarDados();
     }
+    
+    
+
 
     private void initComponents() {
-        // Estilo geral do painel
         setBackground(new Color(245, 247, 250));
         setBorder(new EmptyBorder(30, 30, 30, 30));
         setLayout(new GridBagLayout());
@@ -39,8 +52,7 @@ public class RegistrarConsumoPanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Título
-        JLabel titulo = new JLabel("🍽️ Registrar Consumo Diário");
+        JLabel titulo = new JLabel("Registrar Consumo Diário");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titulo.setForeground(new Color(30, 60, 90));
         gbc.gridwidth = 2;
@@ -48,52 +60,52 @@ public class RegistrarConsumoPanel extends JPanel {
         gbc.gridy = 0;
         add(titulo, gbc);
 
-        // Subtítulo
-        JLabel subtitulo = new JLabel("Informe os dados do consumo do cavalo");
+        JLabel subtitulo = new JLabel("Selecione o cavalo, o alimento e informe a quantidade consumida por dia");
         subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         subtitulo.setForeground(new Color(100, 120, 140));
         gbc.gridy++;
         add(subtitulo, gbc);
 
-        // Campos
         gbc.gridwidth = 1;
         gbc.gridy++;
 
+        // Equino
         gbc.gridx = 0;
-        JLabel lblEquino = new JLabel("Nome do Equino");
+        JLabel lblEquino = new JLabel("Equino");
         lblEquino.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblEquino.setForeground(new Color(40, 60, 80));
         add(lblEquino, gbc);
 
         gbc.gridx = 1;
-        txtNomeEquino = new JTextField();
-        txtNomeEquino.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtNomeEquino.setPreferredSize(new Dimension(250, 35));
-        txtNomeEquino.setBackground(Color.WHITE);
-        txtNomeEquino.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
-        add(txtNomeEquino, gbc);
+        cbEquinos = new JComboBox<>();
+        cbEquinos.setToolTipText("Selecione um cavalo cadastrado");
+        estilizarCombo(cbEquinos);
+        cbEquinos.addActionListener(e -> mostrarInfoEquino());
+        add(cbEquinos, gbc);
 
+        // Informações do equino
+        gbc.gridy++;
+        gbc.gridx = 1;
+        lblInfoEquino = new JLabel(" ");
+        lblInfoEquino.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblInfoEquino.setForeground(new Color(100, 120, 140));
+        add(lblInfoEquino, gbc);
+
+        // Alimento
         gbc.gridy++;
         gbc.gridx = 0;
-        JLabel lblAlimento = new JLabel("Nome do Alimento");
+        JLabel lblAlimento = new JLabel("Alimento");
         lblAlimento.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblAlimento.setForeground(new Color(40, 60, 80));
         add(lblAlimento, gbc);
 
         gbc.gridx = 1;
-        txtNomeAlimento = new JTextField();
-        txtNomeAlimento.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtNomeAlimento.setPreferredSize(new Dimension(250, 35));
-        txtNomeAlimento.setBackground(Color.WHITE);
-        txtNomeAlimento.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
-        add(txtNomeAlimento, gbc);
+        cbAlimentos = new JComboBox<>();
+        cbAlimentos.setToolTipText("Selecione um alimento cadastrado");
+        estilizarCombo(cbAlimentos);
+        add(cbAlimentos, gbc);
 
+        // Quantidade
         gbc.gridy++;
         gbc.gridx = 0;
         JLabel lblQuantidade = new JLabel("Quantidade (kg/dia)");
@@ -103,13 +115,13 @@ public class RegistrarConsumoPanel extends JPanel {
 
         gbc.gridx = 1;
         txtQuantidade = new JTextField();
-        txtQuantidade.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtQuantidade.setPreferredSize(new Dimension(150, 35));
-        txtQuantidade.setBackground(Color.WHITE);
-        txtQuantidade.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        txtQuantidade.setToolTipText("Digite a quantidade consumida por dia");
+        estilizarCampo(txtQuantidade);
+        txtQuantidade.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                validarQuantidade();
+            }
+        });
         add(txtQuantidade, gbc);
 
         // Botão
@@ -117,15 +129,11 @@ public class RegistrarConsumoPanel extends JPanel {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.EAST;
         btnRegistrar = new JButton("Registrar Consumo");
-        btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnRegistrar.setBackground(new Color(0, 150, 136));
-        btnRegistrar.setForeground(Color.WHITE);
-        btnRegistrar.setFocusPainted(false);
-        btnRegistrar.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
-        btnRegistrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        estilizarBotao(btnRegistrar);
         btnRegistrar.addActionListener(e -> registrarConsumo());
         add(btnRegistrar, gbc);
 
+        // Mensagem
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
@@ -137,22 +145,87 @@ public class RegistrarConsumoPanel extends JPanel {
         add(lblMensagem, gbc);
     }
 
+    
+    public void carregarDados() {
+        // Carrega equinos
+        List<Equino> equinos = equinoRepository.listarTodos();
+        cbEquinos.removeAllItems();
+        for (Equino e : equinos) {
+            cbEquinos.addItem(e.getNome());
+        }
+        if (cbEquinos.getItemCount() > 0) {
+            cbEquinos.setSelectedIndex(0);
+            mostrarInfoEquino();
+        }
+
+        // Carrega alimentos
+        List<Alimento> alimentos = alimentoRepository.listarTodos();
+        cbAlimentos.removeAllItems();
+        for (Alimento a : alimentos) {
+            cbAlimentos.addItem(a.getNome() + " (" + a.getTipo() + ")");
+        }
+    }
+
+    private void mostrarInfoEquino() {
+        String nome = (String) cbEquinos.getSelectedItem();
+        if (nome != null) {
+            Equino e = equinoRepository.buscarPorNome(nome);
+            if (e != null) {
+                lblInfoEquino.setText(String.format("Peso: %.1f kg | Categoria: %s", e.getPeso(), e.getCategoria()));
+            } else {
+                lblInfoEquino.setText(" ");
+            }
+        }
+    }
+
+    private void validarQuantidade() {
+        String texto = txtQuantidade.getText().trim();
+        if (!texto.isEmpty()) {
+            try {
+                double qtd = Double.parseDouble(texto);
+                if (qtd <= 0) {
+                    txtQuantidade.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(Color.RED, 1, true),
+                            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                    ));
+                } else {
+                    txtQuantidade.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(new Color(0, 150, 136), 1, true),
+                            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                    ));
+                }
+            } catch (NumberFormatException e) {
+                txtQuantidade.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.RED, 1, true),
+                        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                ));
+            }
+        }
+    }
+
     private void registrarConsumo() {
-        lblMensagem.setText(" ");
-        String nomeEquino = txtNomeEquino.getText().trim();
-        String nomeAlimento = txtNomeAlimento.getText().trim();
+        lblMensagem.setText("");
+        String nomeEquino = (String) cbEquinos.getSelectedItem();
+        String alimentoCombo = (String) cbAlimentos.getSelectedItem();
         String quantidadeStr = txtQuantidade.getText().trim();
 
-        if (nomeEquino.isEmpty()) {
-            exibirMensagem("Informe o nome do equino.", Color.RED);
+        // Extrai o nome do alimento
+        String nomeAlimento = alimentoCombo;
+        if (alimentoCombo != null && alimentoCombo.contains("(")) {
+            nomeAlimento = alimentoCombo.substring(0, alimentoCombo.indexOf("(")).trim();
+        }
+
+        if (nomeEquino == null || nomeEquino.isEmpty()) {
+            exibirMensagem("Selecione um equino.", Color.RED);
             return;
         }
-        if (nomeAlimento.isEmpty()) {
-            exibirMensagem("Informe o nome do alimento.", Color.RED);
+        if (alimentoCombo == null || alimentoCombo.isEmpty()) {
+            exibirMensagem("Selecione um alimento.", Color.RED);
             return;
         }
         if (quantidadeStr.isEmpty()) {
             exibirMensagem("Informe a quantidade.", Color.RED);
+            txtQuantidade.requestFocus();
             return;
         }
 
@@ -160,7 +233,14 @@ public class RegistrarConsumoPanel extends JPanel {
         try {
             quantidade = Double.parseDouble(quantidadeStr);
         } catch (NumberFormatException e) {
-            exibirMensagem("Quantidade inválida (use números).", Color.RED);
+            exibirMensagem("Quantidade inválida! Use números).", Color.RED);
+            txtQuantidade.requestFocus();
+            return;
+        }
+
+        if (quantidade <= 0) {
+            exibirMensagem("Quantidade deve ser maior que zero.", Color.RED);
+            txtQuantidade.requestFocus();
             return;
         }
 
@@ -170,10 +250,44 @@ public class RegistrarConsumoPanel extends JPanel {
             exibirMensagem(" " + resultado, Color.RED);
         } else {
             exibirMensagem("✅ " + resultado, new Color(0, 150, 136));
-            txtNomeEquino.setText("");
-            txtNomeAlimento.setText("");
             txtQuantidade.setText("");
+            // Restaura borda
+            txtQuantidade.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+            ));
+            // Recarrega os dados para refletir novos cadastros
+            carregarDados();
         }
+    }
+
+    private void estilizarCampo(JTextField campo) {
+        campo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        campo.setPreferredSize(new Dimension(250, 35));
+        campo.setBackground(Color.WHITE);
+        campo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
+    private void estilizarCombo(JComboBox<?> combo) {
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        combo.setBackground(Color.WHITE);
+        combo.setPreferredSize(new Dimension(250, 35));
+        combo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
+    private void estilizarBotao(JButton botao) {
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botao.setBackground(new Color(0, 150, 136));
+        botao.setForeground(Color.WHITE);
+        botao.setFocusPainted(false);
+        botao.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     private void exibirMensagem(String texto, Color cor) {

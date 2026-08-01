@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.ui;
+
 
 /**
  *
@@ -14,10 +14,7 @@ import com.mycompany.domain.CategoriaFisiologica;
 import com.mycompany.domain.TipoAlimento;
 import com.mycompany.ui.MainFrame;
 
-/**
- * Classe de teste que pré-popula o banco de dados com dados de exemplo
- * e então abre a interface principal para teste visual completo.
- */
+
 public class UIFlowTestLauncher {
 
     public static void main(String[] args) {

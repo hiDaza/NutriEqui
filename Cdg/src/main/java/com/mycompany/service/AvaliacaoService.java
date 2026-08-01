@@ -9,26 +9,61 @@ package com.mycompany.service;
  * @author daza
  */
 
-
-import static com.mycompany.domain.CategoriaFisiologica.ATLETA_INTENSO;
-import static com.mycompany.domain.CategoriaFisiologica.ATLETA_LEVE;
-import static com.mycompany.domain.CategoriaFisiologica.ATLETA_MODERADO;
-import static com.mycompany.domain.CategoriaFisiologica.GESTANTE_FINAL;
-import static com.mycompany.domain.CategoriaFisiologica.LACTANTE;
-import static com.mycompany.domain.CategoriaFisiologica.MANTENCAO;
-import com.mycompany.domain.Consumo;
-import com.mycompany.domain.DiagnosticoNutricional;
-import com.mycompany.domain.Equino;
-import com.mycompany.domain.TipoAlimento;
+import com.mycompany.domain.*;
 import com.mycompany.repository.ConsumoRepository;
 import java.util.List;
 
 public class AvaliacaoService {
 
-    private ConsumoRepository consumoRepository;
+    private static final double ED_MANUTENCAO = 0.033; // Mcal/kg PV
+    private final ConsumoRepository consumoRepository;
 
     public AvaliacaoService() {
         this.consumoRepository = new ConsumoRepository();
+    }
+
+    private double calcularExigencia(Equino equino) {
+        double peso = equino.getPeso();
+        double base = peso * ED_MANUTENCAO;
+
+        return switch (equino.getCategoria()) {
+            // adultos
+            case MANTENCAO -> base;
+
+            // atletas com níveis
+            case ATLETA_LEVE -> base * 1.4;
+            case ATLETA_MODERADO -> base * 1.6;
+            case ATLETA_INTENSO -> base * 1.8;
+
+            // gestacao
+            case GESTANTE_INICIO -> base * 1.0;
+            case GESTANTE_FINAL -> base * 1.2; // terceiro terço final da gestação
+
+            // lactacao
+            case LACTANTE -> base * 1.8; //mês inicial 
+
+            // Potros 
+            case POTRO_DESMAME -> base * 2.0; // 4 a 6 meses
+            case POTRO_ATE_1_ANO -> base * 1.8;
+            case POTRO_ATE_2_ANOS -> base * 1.4; // 1 e meio 2 anos
+
+            // garanhões
+            case GARANHAO_MONTA -> base * 1.4; //
+
+            // se nao mapeado retorna com aviso
+            default -> base;
+        };
+    }
+
+
+    private String getAlertaNutricional(Equino equino) {
+        return switch (equino.getCategoria()) {
+            case GESTANTE_INICIO, GESTANTE_FINAL, LACTANTE,
+                 POTRO_DESMAME, POTRO_ATE_1_ANO, POTRO_ATE_2_ANOS ->
+                "A análise energética isolada não é suficiente. Avalie também proteína, lisina, cálcio, fósforo, cobre, zinco, selênio e vitamina E.";
+
+            default -> "";
+        };
     }
 
     public DiagnosticoNutricional avaliarEquino(Equino equino) {
@@ -37,36 +72,29 @@ public class AvaliacaoService {
         double edFornecida = calcularFornecimento(consumos);
         double saldo = edFornecida - edExigida;
 
+        // Tolerância de ±0,5 Mcal
+        double tolerancia = 0.5;
+
         String classificacao;
         String recomendacao;
 
-        if (saldo < -0.5) {
+        if (saldo < -tolerancia) {
             classificacao = "DÉFICIT ENERGÉTICO";
             recomendacao = gerarSugestaoAumento(consumos, saldo * -1);
-        } else if (saldo > 0.5) {
+        } else if (saldo > tolerancia) {
             classificacao = "EXCESSO ENERGÉTICO";
-            recomendacao = "Reduza a quantidade de ração ou volumoso na dieta.";
+            recomendacao = gerarSugestaoReducao(consumos);
         } else {
-            classificacao = "ADEQUADO";
+            classificacao = "ADEQUADO. Dentro da tolerância";
             recomendacao = "A dieta está equilibrada em energia.";
         }
 
+        String alerta = getAlertaNutricional(equino);
+        if (!alerta.isEmpty()) {
+            recomendacao = recomendacao + "\n" + alerta;
+        }
+
         return new DiagnosticoNutricional(equino, edExigida, edFornecida, saldo, classificacao, recomendacao);
-    }
-
-    private double calcularExigencia(Equino equino) {
-        double peso = equino.getPeso();
-        double base = peso * 0.033; // Mcal/dia para manutenção
-
-        return switch (equino.getCategoria()) {
-            case MANTENCAO -> base;
-            case ATLETA_LEVE -> base * 1.4;
-            case ATLETA_MODERADO -> base * 1.6;
-            case ATLETA_INTENSO -> base * 1.8;
-            case GESTANTE_FINAL -> base * 1.2;
-            case LACTANTE -> base * 1.8;
-            default -> base; // Para outras categorias, usa manutenção + aviso (pode ser melhorado depois)
-        };
     }
 
     private double calcularFornecimento(List<Consumo> consumos) {
@@ -78,20 +106,37 @@ public class AvaliacaoService {
     }
 
     private String gerarSugestaoAumento(List<Consumo> consumos, double deficit) {
-        // Procura primeiro um volumoso
+        // Prioriza volumoso
         for (Consumo c : consumos) {
             if (c.getAlimento().getTipo() == TipoAlimento.VOLUMOSO) {
                 double kg = deficit / c.getAlimento().getEnergiaDigestivel();
-                return String.format("Adicionar +%.2f kg/dia de %s", kg, c.getAlimento().getNome());
+                return String.format("Adicionar +%.2f kg/dia de %s (volumoso)", kg, c.getAlimento().getNome());
             }
         }
-        // Se não achou volumoso, sugere ração
+        // sugere raçao caso nao esteva volumoso
         for (Consumo c : consumos) {
             if (c.getAlimento().getTipo() == TipoAlimento.RACAO) {
                 double kg = deficit / c.getAlimento().getEnergiaDigestivel();
-                return String.format("Adicionar +%.2f kg/dia de %s", kg, c.getAlimento().getNome());
+                return String.format("Adicionar +%.2f kg/dia de %s (ração)", kg, c.getAlimento().getNome());
             }
         }
         return "Cadastre um alimento (volumoso ou ração) para receber sugestões.";
+    }
+
+    private String gerarSugestaoReducao(List<Consumo> consumos) {
+        // prioriza a redução da ração
+        for (Consumo c : consumos) {
+            if (c.getAlimento().getTipo() == TipoAlimento.RACAO) {
+                double excesso = c.getQuantidadeKgPorDia() * 0.1; // reduz 10%
+                return String.format("Reduza %.2f kg/dia de %s (ração) – ou reavalie a dieta.", excesso, c.getAlimento().getNome());
+            }
+        }
+        for (Consumo c : consumos) {
+            if (c.getAlimento().getTipo() == TipoAlimento.VOLUMOSO) {
+                double excesso = c.getQuantidadeKgPorDia() * 0.05; // reduz 5%
+                return String.format("Reduza %.2f kg/dia de %s (volumoso) – ou reavalie a dieta.", excesso, c.getAlimento().getNome());
+            }
+        }
+        return "Revise a dieta para reduzir a energia fornecida.";
     }
 }

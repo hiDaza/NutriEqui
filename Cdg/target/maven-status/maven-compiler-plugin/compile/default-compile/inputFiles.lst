@@ -3,12 +3,14 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/TipoAlimento.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/ConsumoService.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Consumo.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/AvaliarEquinoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/EquinoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Equino.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/ConsumoRepository.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/AlimentoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/nutriequi/NutriEqui.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/CategoriaFisiologica.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/CadastrarEquinoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/NutricaoService.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/ConsumoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/DiagnosticoNutricional.java
@@ -16,4 +18,6 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Alimento.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/JpaUtil.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/AvaliacaoService.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/MainFrame.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/EquinoRepository.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/CadastrarAlimentoPanel.java

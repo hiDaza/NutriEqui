@@ -21,7 +21,7 @@ public class Equino {
 
     private String nome;
     private double peso;
-    private int escoreCorporal;
+    private int scoreCorporal;
 
     @Enumerated(EnumType.STRING)
     private CategoriaFisiologica categoria;
@@ -31,10 +31,10 @@ public class Equino {
 
     public Equino() {}
 
-    public Equino(String nome, double peso, int escoreCorporal, CategoriaFisiologica categoria) {
+    public Equino(String nome, double peso, int scoreCorporal, CategoriaFisiologica categoria) {
         this.nome = nome;
         this.peso = peso;
-        this.escoreCorporal = escoreCorporal;
+        this.scoreCorporal = scoreCorporal;
         this.categoria = categoria;
     }
 
@@ -45,8 +45,8 @@ public class Equino {
     public void setNome(String nome) { this.nome = nome; }
     public double getPeso() { return peso; }
     public void setPeso(double peso) { this.peso = peso; }
-    public int getEscoreCorporal() { return escoreCorporal; }
-    public void setEscoreCorporal(int escoreCorporal) { this.escoreCorporal = escoreCorporal; }
+    public int getScoreCorporal() { return scoreCorporal; }
+    public void setScoreCorporal(int scoreCorporal) { this.scoreCorporal = scoreCorporal; }
     public CategoriaFisiologica getCategoria() { return categoria; }
     public void setCategoria(CategoriaFisiologica categoria) { this.categoria = categoria; }
     public List<Consumo> getConsumos() { return consumos; }

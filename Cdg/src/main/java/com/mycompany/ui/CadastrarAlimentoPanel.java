@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 public class CadastrarAlimentoPanel extends JPanel {
 
     private final AlimentoController alimentoController;
+    private MainFrame mainFrame;
 
     private JTextField txtNome;
     private JTextField txtED;
@@ -28,6 +29,10 @@ public class CadastrarAlimentoPanel extends JPanel {
         this.alimentoController = new AlimentoController();
         initComponents();
     }
+    
+    public void setMainFrame(MainFrame mainFrame){
+        this.mainFrame = mainFrame;
+    }
 
     private void initComponents() {
         setBackground(new Color(245, 247, 250));
@@ -38,7 +43,7 @@ public class CadastrarAlimentoPanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel titulo = new JLabel("🌿 Cadastrar Alimento");
+        JLabel titulo = new JLabel("🌿Cadastrar Alimento");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titulo.setForeground(new Color(30, 60, 90));
         gbc.gridwidth = 2;
@@ -115,7 +120,7 @@ public class CadastrarAlimentoPanel extends JPanel {
         gbc.gridy++;
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.EAST;
-        btnCadastrar = new JButton("✔ Cadastrar Alimento");
+        btnCadastrar = new JButton("Cadastrar Alimento");
         btnCadastrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnCadastrar.setBackground(new Color(0, 150, 136));
         btnCadastrar.setForeground(Color.WHITE);
@@ -135,6 +140,26 @@ public class CadastrarAlimentoPanel extends JPanel {
         lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
         lblMensagem.setBorder(new EmptyBorder(10, 0, 0, 0));
         add(lblMensagem, gbc);
+        
+        
+        ///////CAMPO FUTURO PARA PREÇO DO PRODUTO
+        /*
+        gbc.gridy++;
+        gbc.gridx = 0;
+        JLabel lblPreco = new JLabel("Preço (R$/kg)");
+        lblPreco.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblPreco.setForeground(new Color(40, 60, 80));
+        add(lblPreco, gbc);
+
+        gbc.gridx = 1;
+        txtPreco = new JTextField();
+        txtPreco.setToolTipText("Digite o preço por quilograma");
+        estilizarCampo(txtPreco);
+        add(txtPreco, gbc);
+        */
+        ////////////////
+        
+        
     }
 
     private void cadastrar() {
@@ -174,6 +199,10 @@ public class CadastrarAlimentoPanel extends JPanel {
             txtNome.setText("");
             txtED.setText("");
             cbTipo.setSelectedIndex(0);
+            
+            if(mainFrame != null){
+                mainFrame.atualizarDados();
+            }
         }
     }
 

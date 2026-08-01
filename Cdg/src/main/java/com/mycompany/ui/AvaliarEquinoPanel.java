@@ -10,22 +10,33 @@ package com.mycompany.ui;
  */
 import com.mycompany.controller.AvaliacaoController;
 import com.mycompany.domain.DiagnosticoNutricional;
+import com.mycompany.domain.Equino;
+import com.mycompany.domain.Consumo;
+import com.mycompany.repository.EquinoRepository;
+import com.mycompany.repository.ConsumoRepository;
 import java.awt.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class AvaliarEquinoPanel extends JPanel {
 
     private final AvaliacaoController avaliacaoController;
+    private final EquinoRepository equinoRepository;
+    private final ConsumoRepository consumoRepository;
 
-    private JTextField txtNomeEquino;
+    private JComboBox<String> cbEquinos;
     private JButton btnAvaliar;
     private JTextArea txtResultado;
+    private JTextArea txtResumoDieta;
     private JLabel lblMensagem;
 
     public AvaliarEquinoPanel() {
         this.avaliacaoController = new AvaliacaoController();
+        this.equinoRepository = new EquinoRepository();
+        this.consumoRepository = new ConsumoRepository();
         initComponents();
+        carregarEquinos();
     }
 
     private void initComponents() {
@@ -37,7 +48,6 @@ public class AvaliarEquinoPanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Título
         JLabel titulo = new JLabel("Avaliar Balanço Energético");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titulo.setForeground(new Color(30, 60, 90));
@@ -46,47 +56,61 @@ public class AvaliarEquinoPanel extends JPanel {
         gbc.gridy = 0;
         add(titulo, gbc);
 
-        JLabel subtitulo = new JLabel("Calcule o balanço energético de um equino");
+        JLabel subtitulo = new JLabel("Selecione um equino para calcular o balanço energético");
         subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         subtitulo.setForeground(new Color(100, 120, 140));
         gbc.gridy++;
         add(subtitulo, gbc);
 
-        // Campo nome
         gbc.gridwidth = 1;
         gbc.gridy++;
+
+        // Seleção do equino
         gbc.gridx = 0;
-        JLabel lblNome = new JLabel("Nome do Equino");
-        lblNome.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lblNome.setForeground(new Color(40, 60, 80));
-        add(lblNome, gbc);
+        JLabel lblEquino = new JLabel("Equino");
+        lblEquino.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblEquino.setForeground(new Color(40, 60, 80));
+        add(lblEquino, gbc);
 
         gbc.gridx = 1;
-        txtNomeEquino = new JTextField();
-        txtNomeEquino.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtNomeEquino.setPreferredSize(new Dimension(250, 35));
-        txtNomeEquino.setBackground(Color.WHITE);
-        txtNomeEquino.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
-        add(txtNomeEquino, gbc);
+        cbEquinos = new JComboBox<>();
+        cbEquinos.setToolTipText("Selecione um cavalo cadastrado");
+        estilizarCombo(cbEquinos);
+        cbEquinos.addActionListener(e -> atualizarResumoDieta());
+        add(cbEquinos, gbc);
 
-        // botão
+        // Resumo da dieta
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        JLabel lblResumo = new JLabel("Dieta atual do equino:");
+        lblResumo.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblResumo.setForeground(new Color(40, 60, 80));
+        add(lblResumo, gbc);
+
+        gbc.gridy++;
+        txtResumoDieta = new JTextArea(3, 30);
+        txtResumoDieta.setEditable(false);
+        txtResumoDieta.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtResumoDieta.setBackground(new Color(240, 245, 250));
+        txtResumoDieta.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        JScrollPane scrollResumo = new JScrollPane(txtResumoDieta);
+        scrollResumo.setPreferredSize(new Dimension(500, 60));
+        add(scrollResumo, gbc);
+
+        // Botão avaliar
         gbc.gridy++;
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.EAST;
         btnAvaliar = new JButton("Avaliar");
-        btnAvaliar.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnAvaliar.setBackground(new Color(0, 150, 136));
-        btnAvaliar.setForeground(Color.WHITE);
-        btnAvaliar.setFocusPainted(false);
-        btnAvaliar.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
-        btnAvaliar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        estilizarBotao(btnAvaliar);
         btnAvaliar.addActionListener(e -> avaliar());
         add(btnAvaliar, gbc);
 
-        // area de resultado
+        // diagnostico do equino
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
@@ -101,11 +125,11 @@ public class AvaliarEquinoPanel extends JPanel {
                 BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        JScrollPane scroll = new JScrollPane(txtResultado);
-        scroll.setPreferredSize(new Dimension(500, 200));
-        add(scroll, gbc);
+        JScrollPane scrollResultado = new JScrollPane(txtResultado);
+        scrollResultado.setPreferredSize(new Dimension(500, 200));
+        add(scrollResultado, gbc);
 
-        // erro equino nao encontrado
+        // Mensagem de erro
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
@@ -116,13 +140,47 @@ public class AvaliarEquinoPanel extends JPanel {
         add(lblMensagem, gbc);
     }
 
-    private void avaliar() {
-        lblMensagem.setText(" ");
-        txtResultado.setText("");
-        String nome = txtNomeEquino.getText().trim();
+    public void carregarEquinos() {
+        List<Equino> equinos = equinoRepository.listarTodos();
+        cbEquinos.removeAllItems();
+        for (Equino e : equinos) {
+            cbEquinos.addItem(e.getNome());
+        }
+        if (cbEquinos.getItemCount() > 0) {
+            cbEquinos.setSelectedIndex(0);
+            atualizarResumoDieta();
+        }
+    }
 
-        if (nome.isEmpty()) {
-            exibirMensagem("Informe o nome do equino.", Color.RED);
+    public void atualizarResumoDieta() {
+        String nome = (String) cbEquinos.getSelectedItem();
+        if (nome != null) {
+            Equino e = equinoRepository.buscarPorNome(nome);
+            if (e != null) {
+                List<Consumo> consumos = consumoRepository.buscarPorEquino(e);
+                StringBuilder sb = new StringBuilder();
+                if (consumos.isEmpty()) {
+                    sb.append("Nenhum consumo registrado para este equino.");
+                } else {
+                    for (Consumo c : consumos) {
+                        sb.append(c.getAlimento().getNome())
+                          .append(": ")
+                          .append(c.getQuantidadeKgPorDia())
+                          .append(" kg/dia\n");
+                    }
+                }
+                txtResumoDieta.setText(sb.toString());
+            }
+        }
+    }
+
+    private void avaliar() {
+        lblMensagem.setText("");
+        txtResultado.setText("");
+        String nome = (String) cbEquinos.getSelectedItem();
+
+        if (nome == null || nome.isEmpty()) {
+            exibirMensagem("Selecione um equino.", Color.RED);
             return;
         }
 
@@ -133,28 +191,50 @@ public class AvaliarEquinoPanel extends JPanel {
             return;
         }
 
-        // Exibe o diagnóstico completo
+        // Monta o diagnóstico
         StringBuilder sb = new StringBuilder();
         sb.append("DIAGNÓSTICO NUTRICIONAL\n");
         sb.append("Cavalo: ").append(diag.getEquino().getNome()).append("\n");
-        sb.append(String.format("ED Exigida: %.2f Mcal/dia\n", diag.getEdExigida()));
-        sb.append(String.format("ED Fornecida: %.2f Mcal/dia\n", diag.getEdFornecida()));
-        sb.append(String.format("Saldo: %.2f Mcal/dia\n", diag.getSaldo()));
+        sb.append("Peso: ").append(diag.getEquino().getPeso()).append(" kg\n");
+        sb.append("Categoria: ").append(diag.getEquino().getCategoria()).append("\n");
+        sb.append("ED Exigida: ").append(String.format("%.2f", diag.getEdExigida())).append(" Mcal/dia\n");
+        sb.append("ED Fornecida: ").append(String.format("%.2f", diag.getEdFornecida())).append(" Mcal/dia\n");
+        sb.append("Saldo: ").append(String.format("%.2f", diag.getSaldo())).append(" Mcal/dia\n");
         sb.append("Classificação: ").append(diag.getClassificacao()).append("\n");
         sb.append("Recomendação: ").append(diag.getRecomendacao());
+
         txtResultado.setText(sb.toString());
-        
-        //Classificador possui cores diferentes 
+
+        // classificação dada por cores diferentes
         if (diag.getClassificacao().contains("DÉFICIT")) {
             txtResultado.setForeground(Color.RED);
         } else if (diag.getClassificacao().contains("EXCESSO")) {
-            txtResultado.setForeground(new Color(200, 100, 0)); // laranja
+            txtResultado.setForeground(new Color(200, 100, 0));
         } else {
-            txtResultado.setForeground(new Color(0, 150, 136)); // verde
+            txtResultado.setForeground(new Color(0, 150, 136));
         }
 
         exibirMensagem("✅Avaliação concluída!", new Color(0, 150, 136));
-        txtNomeEquino.setText("");
+    }
+
+ 
+    private void estilizarCombo(JComboBox<?> combo) {
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        combo.setBackground(Color.WHITE);
+        combo.setPreferredSize(new Dimension(250, 35));
+        combo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+    }
+
+    private void estilizarBotao(JButton botao) {
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botao.setBackground(new Color(0, 150, 136));
+        botao.setForeground(Color.WHITE);
+        botao.setFocusPainted(false);
+        botao.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     private void exibirMensagem(String texto, Color cor) {

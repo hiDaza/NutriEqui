@@ -16,13 +16,7 @@ import com.mycompany.controller.AvaliacaoController;
 import com.mycompany.domain.*;
 import com.mycompany.repository.JpaUtil;
 
-/**
- * Classe de teste para validar a persistência e a lógica de negócio
- * do sistema NutriEqui Campo, utilizando os controllers específicos.
- * 
- * Executa o fluxo completo: cadastro de equino, cadastro de alimento,
- * registro de consumo e avaliação energética.
- */
+
 public class TestePersistencia {
 
     public static void main(String[] args) {

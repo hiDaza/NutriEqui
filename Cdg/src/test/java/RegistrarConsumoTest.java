@@ -6,9 +6,11 @@
  *
  * @author daza
  */
-package com.mycompany.ui;
 
+
+import com.mycompany.ui.RegistrarConsumoPanel;
 import javax.swing.*;
+
 
 public class RegistrarConsumoTest {
     
