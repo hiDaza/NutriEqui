@@ -11,6 +11,7 @@ com/mycompany/domain/Alimento.class
 com/mycompany/controller/ConsumoController.class
 com/mycompany/controller/AlimentoController.class
 com/mycompany/repository/AlimentoRepository.class
+com/mycompany/ui/RegistrarConsumoPanel.class
 com/mycompany/nutriequi/NutriEqui.class
 com/mycompany/service/NutricaoService.class
 com/mycompany/service/AvaliacaoService$1.class

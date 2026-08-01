@@ -12,6 +12,7 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/NutricaoService.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/ConsumoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/DiagnosticoNutricional.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/RegistrarConsumoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Alimento.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/JpaUtil.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/AvaliacaoService.java

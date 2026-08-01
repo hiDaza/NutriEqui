@@ -8,7 +8,6 @@ package com.mycompany.service;
  *
  * @author daza
  */
-
 import com.mycompany.domain.Alimento;
 import com.mycompany.domain.Consumo;
 import com.mycompany.domain.Equino;
@@ -28,33 +27,44 @@ public class ConsumoService {
         this.consumoRepository = new ConsumoRepository();
     }
 
-    /**
-     * Registra o consumo de um alimento para um equino.
-     * 
-     * @param nomeEquino    nome do equino
-     * @param nomeAlimento  nome do alimento
-     * @param quantidadeKg  quantidade em kg/dia (deve ser > 0)
-     * @return mensagem de sucesso ou erro
-     */
     public String registrarConsumo(String nomeEquino, String nomeAlimento, double quantidadeKg) {
-        // 1. Validações
-        if (quantidadeKg <= 0) {
-            return "Erro: Quantidade inválida. Deve ser maior que zero.";
-        }
-
-        Equino equino = equinoRepository.buscarPorNome(nomeEquino);
+        //Busca o equino 
+        Equino equino = obterEquino(nomeEquino);
         if (equino == null) {
             return "Erro: Equino não encontrado.";
         }
 
-        Alimento alimento = alimentoRepository.buscarPorNome(nomeAlimento);
+        //Busca o alimento
+        Alimento alimento = obterAlimento(nomeAlimento);
         if (alimento == null) {
             return "Erro: Alimento não encontrado.";
         }
 
-        // 2. Cria e persiste o consumo
+        //velida a quantidade
+        if (!verificarPeso(quantidadeKg)) {
+            return "Erro: Quantidade inválida. Deve ser maior que zero.";
+        }
+
+        //cria e persiste o consumo
         Consumo consumo = new Consumo(equino, alimento, quantidadeKg);
         consumoRepository.salvar(consumo);
+
         return "Consumo registrado com sucesso!";
     }
+
+
+        //busca equino pelo nome
+        private Equino obterEquino(String nomeEquino) {
+            return equinoRepository.buscarPorNome(nomeEquino);
+        }
+
+        //busaa alimento pelo nome
+        private Alimento obterAlimento(String nomeAlimento) {
+            return alimentoRepository.buscarPorNome(nomeAlimento);
+        }
+
+        // verifica se quantidade é valida
+        private boolean verificarPeso(double quantidadeKg) {
+            return quantidadeKg > 0;
+        }
 }
