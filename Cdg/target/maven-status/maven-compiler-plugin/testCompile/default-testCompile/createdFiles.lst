@@ -1,4 +1,7 @@
 UIFlowTestLauncher.class
 RegistrarConsumoTest.class
-UITestLauncher.class
 TestePersistencia.class
+TesteBalancoAbsurdo.class
+TesteBalancoAbsurdo$ResultadoTeste.class
+UITestLauncher.class
+TesteBalancoAbsurdo$Cenario.class
