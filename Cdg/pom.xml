@@ -52,13 +52,13 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin para rodar o console diretamente pelo Maven -->
+            <!-- Plugin para rodar a interface principal do projeto -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.mycompany.ui.ConsoleUI</mainClass>
+                    <mainClass>com.mycompany.ui.MainFrame</mainClass>
                 </configuration>
             </plugin>
 
@@ -70,7 +70,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.mycompany.ui.ConsoleUI</mainClass>
+                            <mainClass>com.mycompany.ui.MainFrame</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -35,11 +35,16 @@ public class EquinoRepository {
     }
 
     public Equino buscarPorNome(String nome) {
+        if (nome == null) {
+            return null;
+        }
+
         EntityManager em = JpaUtil.getEntityManager();
         try {
+            String nomeNormalizado = nome.trim();
             TypedQuery<Equino> query = em.createQuery(
-                    "SELECT e FROM Equino e WHERE e.nome = :nome", Equino.class);
-            query.setParameter("nome", nome);
+                    "SELECT e FROM Equino e WHERE lower(trim(e.nome)) = lower(:nome)", Equino.class);
+            query.setParameter("nome", nomeNormalizado);
             List<Equino> result = query.getResultList();
             return result.isEmpty() ? null : result.get(0);
         } finally {

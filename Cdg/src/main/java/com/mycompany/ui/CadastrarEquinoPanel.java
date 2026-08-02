@@ -65,7 +65,7 @@ public class CadastrarEquinoPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Título
-        JLabel titulo = new JLabel("🐴 Cadastrar Equino");
+        JLabel titulo = new JLabel("Cadastrar Equino");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titulo.setForeground(new Color(30, 60, 90));
         gbc.gridwidth = 2;
@@ -250,9 +250,9 @@ public class CadastrarEquinoPanel extends JPanel {
 
         double peso;
         try {
-            peso = Double.parseDouble(pesoStr);
+            peso = Double.parseDouble(pesoStr.replace(",", "."));
         } catch (NumberFormatException e) {
-            exibirMensagem("Peso inválido!. Use números).", Color.RED);
+            exibirMensagem("Peso inválido! Use números como 450 ou 450.5.", Color.RED);
             txtPeso.requestFocus();
             return;
         }
@@ -269,18 +269,16 @@ public class CadastrarEquinoPanel extends JPanel {
         String resultado = equinoController.cadastrarEquino(nome, peso, score, categoria);
 
         if (resultado.startsWith("Erro")) {
-            exibirMensagem("" + resultado, Color.RED);
+            exibirMensagem(resultado, Color.RED);
         } else {
             exibirMensagem("✅ " + resultado, new Color(0, 150, 136));
-            // Limpa campos
             txtNome.setText("");
             txtPeso.setText("");
             sliderScore.setValue(5);
             cbCategoria.setSelectedIndex(0);
-            if(mainFrame != null){
+            if (mainFrame != null) {
                 mainFrame.atualizarDados();
             }
-            // Restaura borda padrão
             txtPeso.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
                     BorderFactory.createEmptyBorder(5, 10, 5, 10)

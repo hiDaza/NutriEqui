@@ -12,21 +12,53 @@ package com.mycompany.controller;
 import com.mycompany.domain.CategoriaFisiologica;
 import com.mycompany.domain.Equino;
 import com.mycompany.repository.EquinoRepository;
+import java.util.Locale;
 
 public class EquinoController {
 
-    private EquinoRepository equinoRepository;
+    private final EquinoRepository equinoRepository;
 
     public EquinoController() {
-        this.equinoRepository = new EquinoRepository();
+        this(new EquinoRepository());
+    }
+
+    public EquinoController(EquinoRepository equinoRepository) {
+        this.equinoRepository = equinoRepository;
     }
 
     public String cadastrarEquino(String nome, double peso, int score, CategoriaFisiologica categoria) {
-        if (equinoRepository.buscarPorNome(nome) != null) {
+        if (nome == null) {
+            return "Erro: Informe um nome válido para o equino.";
+        }
+
+        String nomeNormalizado = nome.trim();
+        if (nomeNormalizado.isEmpty()) {
+            return "Erro: Informe um nome válido para o equino.";
+        }
+
+        if (peso <= 0) {
+            return "Erro: O peso deve ser maior que zero.";
+        }
+
+        if (score < 1 || score > 9) {
+            return "Erro: O score corporal deve estar entre 1 e 9.";
+        }
+
+        if (categoria == null) {
+            return "Erro: Selecione uma categoria fisiológica.";
+        }
+
+        if (equinoRepository.buscarPorNome(nomeNormalizado) != null) {
             return "Erro: Já existe um equino com este nome.";
         }
-        Equino equino = new Equino(nome, peso, score, categoria);
-        equinoRepository.salvar(equino);
+
+        Equino equino = new Equino(nomeNormalizado, peso, score, categoria);
+        try {
+            equinoRepository.salvar(equino);
+        } catch (Exception e) {
+            return "Erro: Não foi possível salvar o equino. Verifique o banco de dados.";
+        }
+
         return "Equino cadastrado com sucesso! ID: " + equino.getId();
     }
 
