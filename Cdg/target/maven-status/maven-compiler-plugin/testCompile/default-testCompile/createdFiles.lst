@@ -1,0 +1,9 @@
+UIFlowTestLauncher.class
+RegistrarConsumoTest.class
+TestePersistencia.class
+EquinoCadastroTest$StubEquinoRepository.class
+EquinoCadastroTest.class
+TesteBalancoAbsurdo.class
+TesteBalancoAbsurdo$ResultadoTeste.class
+UITestLauncher.class
+TesteBalancoAbsurdo$Cenario.class

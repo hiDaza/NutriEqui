@@ -8,7 +8,6 @@
  * @author daza
  */
 
-
 import com.mycompany.controller.EquinoController;
 import com.mycompany.controller.AlimentoController;
 import com.mycompany.controller.ConsumoController;
@@ -16,11 +15,9 @@ import com.mycompany.controller.AvaliacaoController;
 import com.mycompany.domain.*;
 import com.mycompany.repository.JpaUtil;
 
-
 public class TestePersistencia {
 
     public static void main(String[] args) {
-        // Inicializa os controllers específicos
         EquinoController equinoController = new EquinoController();
         AlimentoController alimentoController = new AlimentoController();
         ConsumoController consumoController = new ConsumoController();
@@ -28,62 +25,64 @@ public class TestePersistencia {
 
         System.out.println("=== TESTE COMPLETO - NUTRIEQUI CAMPO ===\n");
 
-        // 1. TESTE DE CADASTRO DE EQUINO 
+        // 1. TESTE DE CADASTRO DE EQUINO
         System.out.println("1. Teste de cadastro de equino:");
         String resultadoEquino = equinoController.cadastrarEquino(
-                "Alazao", 
-                520.0, 
-                3, 
+                "Alazao",
+                520.0,
+                3,
                 CategoriaFisiologica.ATLETA_MODERADO
         );
         System.out.println("   -> " + resultadoEquino);
 
-        // Tentar cadastrar o mesmo equino novamente (deve falhar)
         String resultadoEquinoDuplicado = equinoController.cadastrarEquino(
-                "Alazao", 
-                520.0, 
-                3, 
+                "Alazao",
+                520.0,
+                3,
                 CategoriaFisiologica.ATLETA_MODERADO
         );
         System.out.println("   -> Tentativa duplicada: " + resultadoEquinoDuplicado);
 
-        // 2. TESTE DE CADASTRO DE ALIMENTO 
+        // 2. TESTE DE CADASTRO DE ALIMENTO (usando métodos específicos)
         System.out.println("\n2. Teste de cadastro de alimento:");
-        String resultadoAlimento = alimentoController.cadastrarAlimento(
-                "Feno Poderoso",
-                TipoAlimento.VOLUMOSO,
-                2.1
-        );
-        System.out.println("   -> " + resultadoAlimento);
 
-        // Tentar cadastrar o mesmo alimento novamente (deve falhar)
-        String resultadoAlimentoDuplicado = alimentoController.cadastrarAlimento(
-                "Feno Poderoso",
-                TipoAlimento.VOLUMOSO,
-                2.1
+        // Cadastrar Feno Poderoso (VOLUMOSO)
+        String resultadoFeno = alimentoController.cadastrarVolumoso(
+                TipoVolumoso.TIFTON,
+                CategoriaVolumoso.B,
+                90.0, 8.0, 65.0, 35.0, 2.1, "Sudeste"
         );
-        System.out.println("   -> Tentativa duplicada: " + resultadoAlimentoDuplicado);
+        System.out.println("   -> " + resultadoFeno);
 
-        // Cadastrar um segundo alimento (ração) para testar múltiplos itens
-        String resultadoAlimento2 = alimentoController.cadastrarAlimento(
+        // Tentar cadastrar o mesmo volumoso (deve falhar)
+        String resultadoFenoDuplicado = alimentoController.cadastrarVolumoso(
+                TipoVolumoso.TIFTON,
+                CategoriaVolumoso.B,
+                90.0, 8.0, 65.0, 35.0, 2.1, "Sudeste"
+        );
+        System.out.println("   -> Tentativa duplicada (volumoso): " + resultadoFenoDuplicado);
+
+        // Cadastrar Ração MUITO PODEROSA (RACAO)
+        String resultadoRacao = alimentoController.cadastrarRacao(
                 "Raçao MUITO PODEROSA",
-                TipoAlimento.RACAO,
-                3.4
+                "Fábrica Z",
+                CategoriaRacao.ATLETA,
+                12.0, 16.0, 6.0, 10.0, 8.0, 18.0, 7.0, 0.9, 0.6, 0.4, 3.4
         );
-        System.out.println("   -> " + resultadoAlimento2);
+        System.out.println("   -> " + resultadoRacao);
 
-        // 3. TESTE DE REGISTRO DE CONSUMO 
+        // 3. TESTE DE REGISTRO DE CONSUMO
         System.out.println("\n3. Teste de registro de consumo:");
 
         // 3.1. Registro válido
         String resultadoConsumo = consumoController.registrarConsumo(
                 "Alazao",
-                "Feno Poderoso",
+                "Feno Poderoso",   // o nome deve ser o nome gerado pelo cadastrarVolumoso
                 10.0
         );
         System.out.println("   -> Registro válido: " + resultadoConsumo);
 
-        // 3.2. Tentar registrar com equino inexistente (deve falhar)
+        // 3.2. Equino inexistente
         String resultadoConsumoEquinoInvalido = consumoController.registrarConsumo(
                 "CORCEL",
                 "Feno Poderoso",
@@ -91,7 +90,7 @@ public class TestePersistencia {
         );
         System.out.println("   -> Equino inexistente: " + resultadoConsumoEquinoInvalido);
 
-        // 3.3. Tentar registrar com alimento inexistente (deve falhar)
+        // 3.3. Alimento inexistente
         String resultadoConsumoAlimentoInvalido = consumoController.registrarConsumo(
                 "Alazao",
                 "RACAO DIFERENTE",
@@ -99,7 +98,7 @@ public class TestePersistencia {
         );
         System.out.println("   -> Alimento inexistente: " + resultadoConsumoAlimentoInvalido);
 
-        // 3.4. Tentar registrar com quantidade inválida (<=0) (deve falhar)
+        // 3.4. Quantidade inválida
         String resultadoConsumoQuantidadeInvalida = consumoController.registrarConsumo(
                 "Alazao",
                 "Feno Poderoso",
@@ -107,7 +106,7 @@ public class TestePersistencia {
         );
         System.out.println("   -> Quantidade inválida (0): " + resultadoConsumoQuantidadeInvalida);
 
-        // 3.5. Registrar um segundo consumo (ração) para o mesmo equino
+        // 3.5. Segundo consumo (ração)
         String resultadoConsumo2 = consumoController.registrarConsumo(
                 "Alazao",
                 "Raçao MUITO PODEROSA",
@@ -118,7 +117,6 @@ public class TestePersistencia {
         // 4. TESTE DE AVALIAÇÃO ENERGÉTICA
         System.out.println("\n4. Teste de avaliação energética:");
 
-        // 4.1. Avaliação para equino existente
         DiagnosticoNutricional diag = avaliacaoController.avaliarEquino("Alazao");
         if (diag != null) {
             System.out.println("   -> Diagnóstico para Alazao:");
@@ -131,13 +129,11 @@ public class TestePersistencia {
             System.out.println("   -> Erro: Equino não encontrado.");
         }
 
-        // 4.2. Avaliação para equino inexistente (deve retornar null)
         DiagnosticoNutricional diagInexistente = avaliacaoController.avaliarEquino("CORCEL");
         if (diagInexistente == null) {
             System.out.println("   -> Avaliação para cavalo inexistente: retornou null (correto).");
         }
 
-        // ========== 5. FINALIZAÇÃO ==========
         System.out.println("\n=== TESTE CONCLUÍDO COM SUCESSO! ===");
         System.out.println("Consulte o banco de dados MySQL para verificar os registros.");
         

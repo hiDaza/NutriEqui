@@ -8,24 +8,29 @@
  *
  * @author daza
  */
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author daza
+ */
 import com.mycompany.controller.AlimentoController;
 import com.mycompany.controller.EquinoController;
-import com.mycompany.domain.CategoriaFisiologica;
-import com.mycompany.domain.TipoAlimento;
+import com.mycompany.domain.*;
 import com.mycompany.ui.MainFrame;
-
 
 public class UIFlowTestLauncher {
 
     public static void main(String[] args) {
         System.out.println("=== PRÉ-CADASTRO DE DADOS DE TESTE ===");
 
-        // Controllers para cadastrar os dados
         EquinoController equinoController = new EquinoController();
         AlimentoController alimentoController = new AlimentoController();
 
-        //Cadastrar cavalo "Alazao" se ja existir vai retornar erro, então quando rodar usar o create do persistence
-        //caso contrario vai ficar salvo no banco o alazao
+        // Cadastrar cavalo "Alazao"
         String resultadoEquino = equinoController.cadastrarEquino(
                 "Alazao",
                 520.0,
@@ -34,39 +39,71 @@ public class UIFlowTestLauncher {
         );
         System.out.println("Cavalo 'Alazao': " + resultadoEquino);
 
-        //Cadastrar Feno Poderoso  classificacao volumoso
-        String resultadoFeno = alimentoController.cadastrarAlimento(
-                "Feno Poderoso",
-                TipoAlimento.VOLUMOSO,
-                2.1
+        // ---------- Cadastrar Feno Poderoso (VOLUMOSO) ----------
+        // Usando cadastrarVolumoso com valores típicos para um feno de boa qualidade
+        String resultadoFeno = alimentoController.cadastrarVolumoso(
+                TipoVolumoso.TIFTON,
+                CategoriaVolumoso.B,
+                90.0,   // matéria seca (%)
+                8.0,    // proteína bruta (%)
+                65.0,   // FDN (%)
+                35.0,   // FDA (%)
+                2.1,    // ED (Mcal/kg)
+                "Sudeste"
         );
         System.out.println("Alimento 'Feno Poderoso': " + resultadoFeno);
 
-        // 3. Cadastrar Ração Power do tipo ração
-        String resultadoRacao = alimentoController.cadastrarAlimento(
+        // ---------- Cadastrar Ração Power (RACAO) ----------
+        String resultadoRacao = alimentoController.cadastrarRacao(
                 "Ração Power",
-                TipoAlimento.RACAO,
-                3.4
+                "Fábrica X",
+                CategoriaRacao.ATLETA,
+                12.0,   // umidade
+                14.0,   // proteína bruta
+                5.0,    // extrato etéreo
+                12.0,   // fibra bruta
+                10.0,   // FDA
+                20.0,   // FDN
+                8.0,    // matéria mineral
+                0.8,    // cálcio
+                0.5,    // fósforo
+                0.3,    // sódio
+                3.4     // ED declarada (opcional)
         );
         System.out.println("Alimento 'Ração Power': " + resultadoRacao);
 
-        //Cadastrar Suplemento do tipo suplement :)
-        String resultadoSuplemento = alimentoController.cadastrarAlimento(
+        // ---------- Cadastrar Suplemento MONSTRAO (SUPLEMENTO) ----------
+        // ED = 0.0, portanto não energético
+        String resultadoSuplemento = alimentoController.cadastrarSuplemento(
                 "Suplemento MONSTRAO",
-                TipoAlimento.SUPLEMENTO,
-                0.0 // Suplemento não energético, ED 0
+                "Fábrica Y",
+                "Vitaminas",
+                UnidadeSuplemento.POR_DOSE,
+                20.0,   // dose recomendada
+                20.0,   // dose usada
+                null,   // energia (opcional)
+                null,   // proteína
+                null,   // gordura
+                null,   // cálcio
+                null,   // fósforo
+                null,   // sódio
+                null,   // potássio
+                null,   // magnésio
+                null,   // selênio
+                null,   // vitamina E
+                null,   // biotina
+                CalculoEnergetico.NAO
         );
         System.out.println("Alimento 'Suplemento MONSTRAO': " + resultadoSuplemento);
 
         System.out.println("\n✅ Dados de teste carregados!");
 
-        // sleep para conseguir ver os dados
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
+
         MainFrame.main(args);
     }
 }

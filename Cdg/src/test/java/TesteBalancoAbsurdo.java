@@ -45,11 +45,30 @@ public class TesteBalancoAbsurdo {
 
         //Cadastra alimentos com ED variadas
         System.out.println("Cadastrando alimentos...");
-        alimentoController.cadastrarAlimento("Feno Muito Poderoso", TipoAlimento.VOLUMOSO, 4.5);
-        alimentoController.cadastrarAlimento("Feno Fraquinho", TipoAlimento.VOLUMOSO, 0.8);
-        alimentoController.cadastrarAlimento("Ração Power", TipoAlimento.RACAO, 5.0);
-        alimentoController.cadastrarAlimento("Ração Fraca", TipoAlimento.RACAO, 2.0);
-        System.out.println();
+
+        // Feno Muito Poderoso (VOLUMOSO)
+        alimentoController.cadastrarVolumoso(
+            TipoVolumoso.TIFTON, CategoriaVolumoso.A,
+            90.0, 10.0, 55.0, 25.0, 4.5, "Sudeste"
+        );
+
+        // Feno Fraquinho (VOLUMOSO)
+        alimentoController.cadastrarVolumoso(
+            TipoVolumoso.OUTRO, CategoriaVolumoso.C,
+            85.0, 5.0, 75.0, 45.0, 0.8, "N/A"
+        );
+
+        // Ração Power (RACAO)
+        alimentoController.cadastrarRacao(
+            "Ração Power", "Fábrica X", CategoriaRacao.ATLETA,
+            10.0, 18.0, 8.0, 8.0, 6.0, 15.0, 6.0, 1.0, 0.6, 0.4, 5.0
+        );
+
+        // Ração Fraca (RACAO)
+        alimentoController.cadastrarRacao(
+            "Ração Fraca", "Fábrica Y", CategoriaRacao.MANUTENCAO,
+            12.0, 12.0, 3.0, 15.0, 12.0, 25.0, 8.0, 0.5, 0.4, 0.2, 2.0
+        );
 
         //define cenários
         List<Cenario> cenarios = List.of(
