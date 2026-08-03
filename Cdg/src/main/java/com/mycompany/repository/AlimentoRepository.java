@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.repository;
 
 /**
@@ -10,6 +6,8 @@ package com.mycompany.repository;
  */
 
 import com.mycompany.domain.Alimento;
+import com.mycompany.domain.TipoAlimento;
+import com.mycompany.domain.TipoVolumoso;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
@@ -47,10 +45,64 @@ public class AlimentoRepository {
         }
     }
 
+    public Alimento buscarRacaoPorNome(String nome) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Alimento> query = em.createQuery(
+                    "SELECT a FROM Alimento a WHERE a.nome = :nome AND a.tipo = :tipo", Alimento.class);
+            query.setParameter("nome", nome);
+            query.setParameter("tipo", TipoAlimento.RACAO);
+            List<Alimento> result = query.getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
+    public Alimento buscarVolumosoPorNomeETipo(String nome, TipoVolumoso tipoVolumoso) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Alimento> query = em.createQuery(
+                    "SELECT a FROM Alimento a WHERE a.nome = :nome AND a.tipoVolumoso = :tipoVolumoso", Alimento.class);
+            query.setParameter("nome", nome);
+            query.setParameter("tipoVolumoso", tipoVolumoso);
+            List<Alimento> result = query.getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
+    public Alimento buscarSupplementoPorNome(String nome) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Alimento> query = em.createQuery(
+                    "SELECT a FROM Alimento a WHERE a.nomeComercialSuplemento = :nome AND a.tipo = :tipo", Alimento.class);
+            query.setParameter("nome", nome);
+            query.setParameter("tipo", TipoAlimento.SUPLEMENTO);
+            List<Alimento> result = query.getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Alimento> listarTodos() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             return em.createQuery("SELECT a FROM Alimento a", Alimento.class).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Alimento> listarPorTipo(TipoAlimento tipo) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Alimento> query = em.createQuery(
+                    "SELECT a FROM Alimento a WHERE a.tipo = :tipo", Alimento.class);
+            query.setParameter("tipo", tipo);
+            return query.getResultList();
         } finally {
             em.close();
         }
