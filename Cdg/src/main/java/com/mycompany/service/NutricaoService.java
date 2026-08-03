@@ -7,7 +7,7 @@ package com.mycompany.service;
 /**
  *
  * @author daza
- */
+ 
 
 import com.mycompany.domain.*;
 import com.mycompany.repository.ConsumoRepository;
@@ -41,7 +41,7 @@ public class NutricaoService {
             recomendacao = "A dieta está equilibrada em energia.";
         }
 
-        return new DiagnosticoNutricional(equino, edExigida, edFornecida, saldo, classificacao, recomendacao);
+        return new DiagnosticoNutricional(equino, edExigida, edFornecida, saldo, classificacao, recomendacao,custoDiario,custoMensal,alertas);
     }
 
     private double calcularExigencia(Equino equino) {
@@ -85,3 +85,4 @@ public class NutricaoService {
         return "Cadastre um alimento (volumoso ou ração) para receber sugestões.";
     }
 }
+*/

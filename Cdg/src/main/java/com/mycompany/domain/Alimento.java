@@ -42,7 +42,16 @@ public class Alimento {
     private Double sodioRacao; // % ou g/kg
     private Double edDec; // Energia Digestível declarada - Mcal/kg (opcional)
     private Double edEst; // Energia Digestível estimada - calculada pelo sistema
+    
+    private Double precoPorKg;
 
+    public Double getPrecoPorKg() {
+        return precoPorKg;
+    }
+
+    public void setPrecoPorKg(Double precoPorKg) {
+        this.precoPorKg = precoPorKg;
+    }
     // ===== VOLUMOSO =====
     @Enumerated(EnumType.STRING)
     private TipoVolumoso tipoVolumoso;

@@ -22,7 +22,7 @@ public class Equino {
     private String nome;
     private double peso;
     private int scoreCorporal;
-
+    private int numeroRefeicoesPorDia;
     @Enumerated(EnumType.STRING)
     private CategoriaFisiologica categoria;
 
@@ -36,6 +36,21 @@ public class Equino {
         this.peso = peso;
         this.scoreCorporal = scoreCorporal;
         this.categoria = categoria;
+        
+    }
+    
+    public Equino(String nome, double peso, int scoreCorporal, 
+              CategoriaFisiologica categoria, int numeroRefeicoesPorDia) {
+    this.nome = nome;
+    this.peso = peso;
+    this.scoreCorporal = scoreCorporal;
+    this.categoria = categoria;
+    this.numeroRefeicoesPorDia = numeroRefeicoesPorDia > 0 ? numeroRefeicoesPorDia : 2;
+
+    }
+    
+    public int getNumeroRefeicoesPorDia() {
+        return numeroRefeicoesPorDia;
     }
 
     // Getters e Setters

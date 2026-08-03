@@ -202,6 +202,16 @@ public class AvaliarEquinoPanel extends JPanel {
         sb.append("Saldo: ").append(String.format("%.2f", diag.getSaldo())).append(" Mcal/dia\n");
         sb.append("Classificação: ").append(diag.getClassificacao()).append("\n");
         sb.append("Recomendação: ").append(diag.getRecomendacao());
+        sb.append("\nCusto Diário: R$ ").append(String.format("%.2f", diag.getCustoDiario()));
+        sb.append("\nCusto Mensal: R$ ").append(String.format("%.2f", diag.getCustoMensal()));
+        sb.append("\n\nAlertas de Segurança:\n");
+        if (diag.getAlertas().isEmpty()) {
+            sb.append("Nenhum alerta.\n");
+        } else {
+            for (String alerta : diag.getAlertas()) {
+                sb.append("• ").append(alerta).append("\n");
+            }
+        }
 
         txtResultado.setText(sb.toString());
 
