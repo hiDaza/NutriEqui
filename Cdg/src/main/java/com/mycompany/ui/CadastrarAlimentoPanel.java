@@ -1,5 +1,6 @@
 //daza
 //adesao do campo de preço a interface
+//correcoes: aceita virgula, limpa todos os campos, mensagem some apos 5s
 
 package com.mycompany.ui;
 
@@ -10,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 public class CadastrarAlimentoPanel extends JPanel {
 
@@ -23,7 +23,6 @@ public class CadastrarAlimentoPanel extends JPanel {
     private JPanel panelCampos;
     private JTextField txtPreco;
 
-    // Mapa para armazenar campos dinâmicos
     private Map<String, JComponent> camposDinamicos = new HashMap<>();
 
     public CadastrarAlimentoPanel() {
@@ -40,15 +39,12 @@ public class CadastrarAlimentoPanel extends JPanel {
         setBorder(new EmptyBorder(30, 30, 30, 30));
         setLayout(new BorderLayout(10, 10));
 
-        // Painel de cabeçalho
         JPanel panelCabecalho = criarCabecalho();
         add(panelCabecalho, BorderLayout.NORTH);
 
-        // Painel de seleção de tipo
         JPanel panelTipo = criarPanelTipo();
         add(panelTipo, BorderLayout.PAGE_START);
 
-        // Painel de campos dinâmicos
         panelCampos = new JPanel();
         panelCampos.setBackground(new Color(245, 247, 250));
         panelCampos.setLayout(new GridBagLayout());
@@ -59,7 +55,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         scrollPane.setBorder(null);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Painel de rodapé (com preço e botão)
         JPanel panelRodape = criarPanelRodape();
         add(panelRodape, BorderLayout.SOUTH);
     }
@@ -109,11 +104,9 @@ public class CadastrarAlimentoPanel extends JPanel {
         panel.setBackground(new Color(245, 247, 250));
         panel.setLayout(new BorderLayout());
 
-        // Painel superior: Preço + Botão 
         JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
         panelSuperior.setBackground(new Color(245, 247, 250));
 
-        // Campo de Preço
         JLabel lblPreco = new JLabel("Preço (R$/kg) *");
         lblPreco.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblPreco.setForeground(new Color(40, 60, 80));
@@ -129,7 +122,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         ));
         panelSuperior.add(txtPreco);
 
-        // Botão Cadastrar
         JButton btnCadastrar = new JButton("Cadastrar Alimento");
         btnCadastrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnCadastrar.setBackground(new Color(0, 150, 136));
@@ -142,7 +134,6 @@ public class CadastrarAlimentoPanel extends JPanel {
 
         panel.add(panelSuperior, BorderLayout.NORTH);
 
-        // Mensagem de feedback
         lblMensagem = new JLabel(" ");
         lblMensagem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
@@ -151,6 +142,7 @@ public class CadastrarAlimentoPanel extends JPanel {
 
         return panel;
     }
+
     private void atualizarCampos() {
         panelCampos.removeAll();
         camposDinamicos.clear();
@@ -213,7 +205,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         adicionarCampoNumerico(gbc, "doseUsada", "Dose Usada", true);
         adicionarCampoCombo(gbc, "unidadeRotulo", "Unidade do Rótulo", UnidadeSuplemento.values(), true);
 
-        // Campos opcionais
         adicionarSeparador(gbc, "--- Nutrientes (Opcionais) ---");
         adicionarCampoNumerico(gbc, "energiaSuplemento", "Energia (kcal)", false);
         adicionarCampoNumerico(gbc, "proteinaSuplemento", "Proteína (%)", false);
@@ -322,10 +313,10 @@ public class CadastrarAlimentoPanel extends JPanel {
             }
 
             if (resultado.startsWith("Erro")) {
-                exibirMensagem("❌ " + resultado, Color.RED);
+                exibirMensagem(" " + resultado, Color.RED);
             } else {
-                exibirMensagem("✅Alimento Cadastrado com Sucesso", new Color(0, 150, 136)); // + resultado  // comentado, pois o usuario nao precisa ter ciência do ID do alimento.  
-                limparCampos();                                                            // depoi corrigir para apresentar o tipo do alimento exato cadastrado.
+                exibirMensagem("✅Alimento Cadastrado com Sucesso", new Color(0, 150, 136)); //removi o +resultado pois o usuario nao tem necessidade de saber de ID ou resultados do sistema interno
+                limparCampos();
                 if (mainFrame != null) {
                     mainFrame.atualizarDados();
                 }
@@ -343,7 +334,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         if (nome.isEmpty()) return "Erro: Informe o nome comercial da ração.";
         if (fabricante.isEmpty()) return "Erro: Informe o fabricante.";
         
-        //preco 
         String precoStr = txtPreco.getText().trim();
         if (precoStr.isEmpty()) return "Erro: Informe o preço por kg.";
         double preco;
@@ -353,7 +343,6 @@ public class CadastrarAlimentoPanel extends JPanel {
             return "Erro: Preço inválido. Use números (ex: 2.50).";
         }
         if (preco <= 0) return "Erro: Preço deve ser maior que zero.";
-        
         
         try {
             double umidade = getCampoNumerico("umidade");
@@ -371,7 +360,7 @@ public class CadastrarAlimentoPanel extends JPanel {
 
             return alimentoController.cadastrarRacao(nome, fabricante, categoria,
                     umidade, proteinaBruta, extratoEtereo, fibraBruta, fda, fdn,
-                    materiaMineralRacao, calcioRacao, fosforoRacao, sodioRacao, edDec,preco);
+                    materiaMineralRacao, calcioRacao, fosforoRacao, sodioRacao, edDec, preco);
         } catch (NumberFormatException e) {
             return "Erro: Valores inválidos. Use números.";
         }
@@ -382,7 +371,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         CategoriaVolumoso categoria = (CategoriaVolumoso) getCampoCombo("categoriaVolumoso");
         String regiao = getCampoTexto("regiao");
         
-        //preco
         String precoStr = txtPreco.getText().trim();
         if (precoStr.isEmpty()) return "Erro: Informe o preço por kg.";
         double preco;
@@ -393,7 +381,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         }
         if (preco <= 0) return "Erro: Preço deve ser maior que zero.";
         
-        
         try {
             double materiaSeca = getCampoNumerico("materiaSeca");
             double proteinaVolumoso = getCampoNumerico("proteinaVolumoso");
@@ -402,7 +389,7 @@ public class CadastrarAlimentoPanel extends JPanel {
             double edVolumoso = getCampoNumerico("edVolumoso");
 
             return alimentoController.cadastrarVolumoso(tipo, categoria, materiaSeca,
-                    proteinaVolumoso, fdnVolumoso, fdaVolumoso, edVolumoso, regiao,preco);
+                    proteinaVolumoso, fdnVolumoso, fdaVolumoso, edVolumoso, regiao, preco);
         } catch (NumberFormatException e) {
             return "Erro: Valores inválidos. Use números.";
         }
@@ -419,8 +406,6 @@ public class CadastrarAlimentoPanel extends JPanel {
         if (fabricante.isEmpty()) return "Erro: Informe o fabricante.";
         if (categoria.isEmpty()) return "Erro: Informe a categoria.";
 
-        
-        //preco
         String precoStr = txtPreco.getText().trim();
         if (precoStr.isEmpty()) return "Erro: Informe o preço por kg.";
         double preco;
@@ -430,7 +415,6 @@ public class CadastrarAlimentoPanel extends JPanel {
             return "Erro: Preço inválido. Use números (ex: 2.50).";
         }
         if (preco <= 0) return "Erro: Preço deve ser maior que zero.";
-        
         
         try {
             double doseRecomendada = getCampoNumerico("doseRecomendada");
@@ -450,7 +434,7 @@ public class CadastrarAlimentoPanel extends JPanel {
 
             return alimentoController.cadastrarSuplemento(nome, fabricante, categoria, unidade,
                     doseRecomendada, doseUsada, energia, proteina, gordura, calcio, fosforo,
-                    sodio, potassio, magnesio, selenio, vitaminaE, biotina, calculoEnergetico,preco);
+                    sodio, potassio, magnesio, selenio, vitaminaE, biotina, calculoEnergetico, preco);
         } catch (NumberFormatException e) {
             return "Erro: Valores inválidos. Use números.";
         }
@@ -464,15 +448,18 @@ public class CadastrarAlimentoPanel extends JPanel {
         return "";
     }
 
+    // CORREÇÃO: substitui vírgula por ponto
     private double getCampoNumerico(String chave) throws NumberFormatException {
         String valor = getCampoTexto(chave);
         if (valor.isEmpty()) throw new NumberFormatException("Campo obrigatório vazio: " + chave);
+        valor = valor.replace(",", ".");
         return Double.parseDouble(valor);
     }
 
     private Double getCampoNumericoOpcional(String chave) {
         String valor = getCampoTexto(chave);
         if (valor.isEmpty()) return null;
+        valor = valor.replace(",", ".");
         return Double.parseDouble(valor);
     }
 
@@ -484,6 +471,7 @@ public class CadastrarAlimentoPanel extends JPanel {
         return null;
     }
 
+    
     private void limparCampos() {
         camposDinamicos.forEach((chave, comp) -> {
             if (comp instanceof JTextField) {
@@ -492,10 +480,13 @@ public class CadastrarAlimentoPanel extends JPanel {
                 ((JComboBox<?>) comp).setSelectedIndex(0);
             }
         });
+        txtPreco.setText("");
     }
 
+    // mudando o tempo que a mensagem de resultado existe agora some após 5 segundos
     private void exibirMensagem(String texto, Color cor) {
         lblMensagem.setText(texto);
         lblMensagem.setForeground(cor);
+        new Timer(5000, e -> lblMensagem.setText(" ")).start();
     }
 }

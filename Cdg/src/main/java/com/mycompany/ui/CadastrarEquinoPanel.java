@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 
@@ -285,9 +286,10 @@ public class CadastrarEquinoPanel extends JPanel {
             ));
         }
     }
-
+    
     private void exibirMensagem(String texto, Color cor) {
         lblMensagem.setText(texto);
         lblMensagem.setForeground(cor);
+        new Timer(5000, e -> lblMensagem.setText(" ")).start();
     }
 }

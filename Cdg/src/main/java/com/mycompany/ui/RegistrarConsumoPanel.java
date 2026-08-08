@@ -181,8 +181,9 @@ public class RegistrarConsumoPanel extends JPanel {
     private void validarQuantidade() {
         String texto = txtQuantidade.getText().trim();
         if (!texto.isEmpty()) {
-            try {
-                double qtd = Double.parseDouble(texto);
+            try { 
+                String textoNormalizado = texto.replace(",",".");
+                double qtd = Double.parseDouble(textoNormalizado);
                 if (qtd <= 0) {
                     txtQuantidade.setBorder(BorderFactory.createCompoundBorder(
                             BorderFactory.createLineBorder(Color.RED, 1, true),
@@ -231,7 +232,7 @@ public class RegistrarConsumoPanel extends JPanel {
 
         double quantidade;
         try {
-            quantidade = Double.parseDouble(quantidadeStr);
+            quantidade = Double.parseDouble(quantidadeStr.replace(",","."));
         } catch (NumberFormatException e) {
             exibirMensagem("Quantidade inválida! Use números).", Color.RED);
             txtQuantidade.requestFocus();
@@ -293,5 +294,6 @@ public class RegistrarConsumoPanel extends JPanel {
     private void exibirMensagem(String texto, Color cor) {
         lblMensagem.setText(texto);
         lblMensagem.setForeground(cor);
+        new Timer(5000, e -> lblMensagem.setText(" ")).start();
     }
 }

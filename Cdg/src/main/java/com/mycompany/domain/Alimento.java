@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
+//daza
+//correção de prioridade entre ed declarada e ed estimada
+
+
 package com.mycompany.domain;
 
 import jakarta.persistence.*;
@@ -211,7 +215,10 @@ public class Alimento {
 
     public double getEnergiaDigestivel() {
         if (tipo == TipoAlimento.RACAO) {
-            return edEst != null ? edEst : (edDec != null ? edDec : 0.0);
+            if (edDec != null && edDec > 0) {
+                return edDec;
+            }
+            return edEst != null ? edEst : 0.0;
         } else if (tipo == TipoAlimento.VOLUMOSO) {
             return edVolumoso != null ? edVolumoso : 0.0;
         } else if (tipo == TipoAlimento.SUPLEMENTO) {

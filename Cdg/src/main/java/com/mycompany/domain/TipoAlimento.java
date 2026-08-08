@@ -9,8 +9,8 @@ package com.mycompany.domain;
  * @author daza
  */    
     public enum TipoAlimento {
-    VOLUMOSO,   // Feno, alfafa, silagem
-    RACAO,      // Ração comercial
+    RACAO,   // Feno, alfafa, silagem
+    VOLUMOSO,      // Ração comercial
     SUPLEMENTO; // Suplemento energético, mineral, etc.
 }
     

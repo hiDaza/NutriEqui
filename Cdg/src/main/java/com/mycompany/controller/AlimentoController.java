@@ -1,6 +1,7 @@
 
 // daza
 // adição de novo parâmetro precoPorKg  em cadastrarRacao, cadastrarVolumoso e cadastrarSuplemento
+// Em cadastrar ração priorização do calculo da ed declarada do que a estimada
 
 package com.mycompany.controller;
 
@@ -20,7 +21,7 @@ public class AlimentoController {
                                  double fibraBruta, double fda, double fdn,
                                  double materiaMineralRacao, double calcioRacao, double fosforoRacao,
                                  double sodioRacao, Double edDec, Double precoPorKg) {
-        
+
         if (alimentoRepository.buscarRacaoPorNome(nome) != null) {
             return "Erro: Já existe uma ração com este nome.";
         }
@@ -36,17 +37,26 @@ public class AlimentoController {
         racao.setCalcioRacao(calcioRacao);
         racao.setFosforoRacao(fosforoRacao);
         racao.setSodioRacao(sodioRacao);
-        racao.setEdDec(edDec);
         racao.setPrecoPorKg(precoPorKg);
 
-        // Calcula ED estimada
-        double edEstimada = calcularEdRacao(proteinaBruta, extratoEtereo, fibraBruta, fdn);
-        racao.setEdEst(edEstimada);
-
-        alimentoRepository.salvar(racao);
-        return "Ração cadastrada com sucesso! ID: " + racao.getId() + " | ED Estimada: " + String.format("%.2f", edEstimada) + " Mcal/kg";
+        // Lógica de prioridade: ED Declarada > ED Estimada
+        if (edDec != null && edDec > 0) {
+            // Usa a ED declarada fornecida pelo usuário/fabricante
+            racao.setEdDec(edDec);
+            racao.setEdEst(null);
+            alimentoRepository.salvar(racao);
+            return "Ração cadastrada com sucesso! ID: " + racao.getId() 
+                    + " | ED Declarada: " + String.format("%.2f", edDec) + " Mcal/kg";
+        } else {
+            // Calcula e usa a ED estimada pelo sistema
+            double edEstimada = calcularEdRacao(proteinaBruta, extratoEtereo, fibraBruta, fdn);
+            racao.setEdEst(edEstimada);
+            alimentoRepository.salvar(racao);
+            return "Ração cadastrada com sucesso! ID: " + racao.getId() 
+                    + " | ED Estimada: " + String.format("%.2f", edEstimada) + " Mcal/kg";
+        }
     }
-
+    
     public String cadastrarVolumoso(TipoVolumoso tipo, CategoriaVolumoso categoria,
                                     double materiaSeca, double proteinaVolumoso,
                                     double fdnVolumoso, double fdaVolumoso,
@@ -83,6 +93,7 @@ public class AlimentoController {
         }
 
         Alimento suplemento = new Alimento();
+        suplemento.setNome(nome);    //nao estava salvando o nome do suplemento
         suplemento.setTipo(TipoAlimento.SUPLEMENTO);
         suplemento.setNomeComercialSuplemento(nome);
         suplemento.setFabricanteSuplemento(fabricante);
