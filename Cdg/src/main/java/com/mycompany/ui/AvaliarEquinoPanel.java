@@ -224,7 +224,7 @@ public class AvaliarEquinoPanel extends JPanel {
             txtResultado.setForeground(new Color(0, 150, 136));
         }
 
-        exibirMensagem("✅Avaliação concluída!", new Color(0, 150, 136));
+        exibirMensagem("Avaliação concluída!", new Color(0, 150, 136));
     }
 
  
