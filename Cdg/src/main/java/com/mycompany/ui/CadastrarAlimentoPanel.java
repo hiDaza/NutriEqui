@@ -64,7 +64,7 @@ public class CadastrarAlimentoPanel extends JPanel {
         panel.setBackground(new Color(245, 247, 250));
         panel.setLayout(new BorderLayout());
 
-        JLabel titulo = new JLabel("🌿 Cadastrar Alimento");
+        JLabel titulo = new JLabel("Cadastrar Alimento");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titulo.setForeground(new Color(30, 60, 90));
         panel.add(titulo, BorderLayout.WEST);
@@ -315,14 +315,14 @@ public class CadastrarAlimentoPanel extends JPanel {
             if (resultado.startsWith("Erro")) {
                 exibirMensagem(" " + resultado, Color.RED);
             } else {
-                exibirMensagem("✅Alimento Cadastrado com Sucesso", new Color(0, 150, 136)); //removi o +resultado pois o usuario nao tem necessidade de saber de ID ou resultados do sistema interno
+                exibirMensagem("Alimento Cadastrado com Sucesso", new Color(0, 150, 136)); //removi o +resultado pois o usuario nao tem necessidade de saber de ID ou resultados do sistema interno
                 limparCampos();
                 if (mainFrame != null) {
                     mainFrame.atualizarDados();
                 }
             }
         } catch (Exception e) {
-            exibirMensagem("❌ Erro: " + e.getMessage(), Color.RED);
+            exibirMensagem("Erro: " + e.getMessage(), Color.RED);
         }
     }
 
