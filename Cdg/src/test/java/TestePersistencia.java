@@ -50,7 +50,7 @@ public class TestePersistencia {
         String resultadoFeno = alimentoController.cadastrarVolumoso(
                 TipoVolumoso.TIFTON,
                 CategoriaVolumoso.B,
-                90.0, 8.0, 65.0, 35.0, 2.1, "Sudeste"
+                90.0, 8.0, 65.0, 35.0, 2.1, "Sudeste",50.00
         );
         System.out.println("   -> " + resultadoFeno);
 
@@ -58,7 +58,7 @@ public class TestePersistencia {
         String resultadoFenoDuplicado = alimentoController.cadastrarVolumoso(
                 TipoVolumoso.TIFTON,
                 CategoriaVolumoso.B,
-                90.0, 8.0, 65.0, 35.0, 2.1, "Sudeste"
+                90.0, 8.0, 65.0, 35.0, 2.1, "Sudeste",50.00
         );
         System.out.println("   -> Tentativa duplicada (volumoso): " + resultadoFenoDuplicado);
 
@@ -67,7 +67,7 @@ public class TestePersistencia {
                 "Raçao MUITO PODEROSA",
                 "Fábrica Z",
                 CategoriaRacao.ATLETA,
-                12.0, 16.0, 6.0, 10.0, 8.0, 18.0, 7.0, 0.9, 0.6, 0.4, 3.4
+                12.0, 16.0, 6.0, 10.0, 8.0, 18.0, 7.0, 0.9, 0.6, 0.4, 3.4,15.00
         );
         System.out.println("   -> " + resultadoRacao);
 

@@ -49,25 +49,25 @@ public class TesteBalancoAbsurdo {
         // Feno Muito Poderoso (VOLUMOSO)
         alimentoController.cadastrarVolumoso(
             TipoVolumoso.TIFTON, CategoriaVolumoso.A,
-            90.0, 10.0, 55.0, 25.0, 4.5, "Sudeste"
+            90.0, 10.0, 55.0, 25.0, 4.5, "Sudeste",50.00
         );
 
         // Feno Fraquinho (VOLUMOSO)
         alimentoController.cadastrarVolumoso(
             TipoVolumoso.OUTRO, CategoriaVolumoso.C,
-            85.0, 5.0, 75.0, 45.0, 0.8, "N/A"
+            85.0, 5.0, 75.0, 45.0, 0.8, "N/A",15.00
         );
 
         // Ração Power (RACAO)
         alimentoController.cadastrarRacao(
             "Ração Power", "Fábrica X", CategoriaRacao.ATLETA,
-            10.0, 18.0, 8.0, 8.0, 6.0, 15.0, 6.0, 1.0, 0.6, 0.4, 5.0
+            10.0, 18.0, 8.0, 8.0, 6.0, 15.0, 6.0, 1.0, 0.6, 0.4, 5.0,150.00
         );
 
         // Ração Fraca (RACAO)
         alimentoController.cadastrarRacao(
             "Ração Fraca", "Fábrica Y", CategoriaRacao.MANUTENCAO,
-            12.0, 12.0, 3.0, 15.0, 12.0, 25.0, 8.0, 0.5, 0.4, 0.2, 2.0
+            12.0, 12.0, 3.0, 15.0, 12.0, 25.0, 8.0, 0.5, 0.4, 0.2, 2.0,10.00
         );
 
         //define cenários

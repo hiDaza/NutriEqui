@@ -1,3 +1,7 @@
+
+// daza
+// adição de novo parâmetro precoPorKg  em cadastrarRacao, cadastrarVolumoso e cadastrarSuplemento
+
 package com.mycompany.controller;
 
 import com.mycompany.domain.*;
@@ -15,7 +19,7 @@ public class AlimentoController {
                                  double umidade, double proteinaBruta, double extratoEtereo,
                                  double fibraBruta, double fda, double fdn,
                                  double materiaMineralRacao, double calcioRacao, double fosforoRacao,
-                                 double sodioRacao, Double edDec) {
+                                 double sodioRacao, Double edDec, Double precoPorKg) {
         
         if (alimentoRepository.buscarRacaoPorNome(nome) != null) {
             return "Erro: Já existe uma ração com este nome.";
@@ -33,6 +37,7 @@ public class AlimentoController {
         racao.setFosforoRacao(fosforoRacao);
         racao.setSodioRacao(sodioRacao);
         racao.setEdDec(edDec);
+        racao.setPrecoPorKg(precoPorKg);
 
         // Calcula ED estimada
         double edEstimada = calcularEdRacao(proteinaBruta, extratoEtereo, fibraBruta, fdn);
@@ -45,7 +50,7 @@ public class AlimentoController {
     public String cadastrarVolumoso(TipoVolumoso tipo, CategoriaVolumoso categoria,
                                     double materiaSeca, double proteinaVolumoso,
                                     double fdnVolumoso, double fdaVolumoso,
-                                    double edVolumoso, String regiao) {
+                                    double edVolumoso, String regiao, Double precoPorKg) {
         
         String nome = tipo.getDescricao() + " - Categoria " + categoria.getDescricao();
         if (alimentoRepository.buscarVolumosoPorNomeETipo(nome, tipo) != null) {
@@ -59,6 +64,7 @@ public class AlimentoController {
         volumoso.setFdaVolumoso(fdaVolumoso);
         volumoso.setEdVolumoso(edVolumoso);
         volumoso.setRegiao(regiao);
+        volumoso.setPrecoPorKg(precoPorKg);
 
         alimentoRepository.salvar(volumoso);
         return "Volumoso cadastrado com sucesso! ID: " + volumoso.getId();
@@ -70,7 +76,7 @@ public class AlimentoController {
                                       Double gordura, Double calcio, Double fosforo,
                                       Double sodio, Double potassio, Double magnesio,
                                       Double selenio, Double vitaminaE, Double biotina,
-                                      CalculoEnergetico calculoEnergetico) {
+                                      CalculoEnergetico calculoEnergetico, Double precoPorKg) {
         
         if (alimentoRepository.buscarSupplementoPorNome(nome) != null) {
             return "Erro: Já existe um suplemento com este nome.";
@@ -84,6 +90,7 @@ public class AlimentoController {
         suplemento.setUnidadeRotulo(unidade);
         suplemento.setDoseRecomendada(doseRecomendada);
         suplemento.setDoseUsada(doseUsada);
+        suplemento.setPrecoPorKg(precoPorKg);
 
         // Campos opcionais
         if (energia != null) suplemento.setEnergiaSuplemento(energia);

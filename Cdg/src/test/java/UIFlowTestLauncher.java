@@ -49,7 +49,8 @@ public class UIFlowTestLauncher {
                 65.0,   // FDN (%)
                 35.0,   // FDA (%)
                 2.1,    // ED (Mcal/kg)
-                "Sudeste"
+                "Sudeste",
+                50.00   //preco
         );
         System.out.println("Alimento 'Feno Poderoso': " + resultadoFeno);
 
@@ -68,7 +69,8 @@ public class UIFlowTestLauncher {
                 0.8,    // cálcio
                 0.5,    // fósforo
                 0.3,    // sódio
-                3.4     // ED declarada (opcional)
+                3.4,     // ED declarada (opcional)
+                15.00    //preco
         );
         System.out.println("Alimento 'Ração Power': " + resultadoRacao);
 
@@ -92,7 +94,8 @@ public class UIFlowTestLauncher {
                 null,   // selênio
                 null,   // vitamina E
                 null,   // biotina
-                CalculoEnergetico.NAO
+                CalculoEnergetico.NAO,
+                150.00 //preco altao
         );
         System.out.println("Alimento 'Suplemento MONSTRAO': " + resultadoSuplemento);
 

@@ -271,7 +271,7 @@ public class CadastrarEquinoPanel extends JPanel {
         if (resultado.startsWith("Erro")) {
             exibirMensagem(resultado, Color.RED);
         } else {
-            exibirMensagem("✅ " + resultado, new Color(0, 150, 136));
+            exibirMensagem("✅Equino Cadastrado com sucesso", new Color(0, 150, 136)); // + resultado // Nao apresentar o resultado pois apresenta ID do cavalo, que é desnecessário para nosso usuario
             txtNome.setText("");
             txtPeso.setText("");
             sliderScore.setValue(5);
