@@ -12,7 +12,9 @@ package com.mycompany.service;
  */
 
 import com.mycompany.domain.*;
+import com.mycompany.repository.AvaliacaoHistoricoRepository;
 import com.mycompany.repository.ConsumoRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +22,11 @@ public class AvaliacaoService {
 
     private static final double ED_MANUTENCAO = 0.033; // Mcal/kg PV
     private final ConsumoRepository consumoRepository;
+    private final AvaliacaoHistoricoRepository avaliacaoHistoricoRepository;
     
     public AvaliacaoService() {
         this.consumoRepository = new ConsumoRepository();
+        this.avaliacaoHistoricoRepository = new AvaliacaoHistoricoRepository();
     }
 
     private double calcularExigencia(Equino equino) {
@@ -112,7 +116,24 @@ public class AvaliacaoService {
             recomendacao = recomendacao + "\n" + alerta;
         }
 
-        return new DiagnosticoNutricional(equino, edExigida, edFornecida, saldo, classificacao, recomendacao, custoDiario, custoMensal, alertas);
+        DiagnosticoNutricional diagnostico = new DiagnosticoNutricional(
+                equino, edExigida, edFornecida, saldo, classificacao, recomendacao, custoDiario, custoMensal, alertas
+        );
+
+        String dietaConsumida = montarResumoDieta(consumos);
+        AvaliacaoHistorico registroHistorico = new AvaliacaoHistorico(
+                equino,
+                LocalDateTime.now(),
+                equino.getPeso(),
+                equino.getScoreCorporal(),
+                equino.getCategoria(),
+                dietaConsumida,
+                saldo,
+                recomendacao
+        );
+        avaliacaoHistoricoRepository.salvar(registroHistorico);
+
+        return diagnostico;
     }
 
     private double calcularFornecimento(List<Consumo> consumos) {
@@ -156,6 +177,21 @@ public class AvaliacaoService {
             }
         }
         return "Revise a dieta para reduzir a energia fornecida.";
+    }
+
+    private String montarResumoDieta(List<Consumo> consumos) {
+        if (consumos == null || consumos.isEmpty()) {
+            return "Nenhum consumo registrado para este equino.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Consumo consumo : consumos) {
+            sb.append(consumo.getAlimento().getNome())
+              .append(": ")
+              .append(consumo.getQuantidadeKgPorDia())
+              .append(" kg/dia; ");
+        }
+        return sb.toString().trim();
     }
     
     

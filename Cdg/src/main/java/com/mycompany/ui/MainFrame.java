@@ -15,8 +15,10 @@ import javax.swing.*;
 import java.util.concurrent.ExecutionException;
 
 public class MainFrame extends JFrame {
-        private RegistrarConsumoPanel registrarConsumoPanel;
-        private AvaliarEquinoPanel avaliarEquinoPanel;
+    private RegistrarConsumoPanel registrarConsumoPanel;
+    private AvaliarEquinoPanel avaliarEquinoPanel;
+    private HistoricoAvaliacoesPanel historicoAvaliacoesPanel;
+
     public MainFrame() {
         
         setTitle("🌾NutriEqui Campo");
@@ -44,6 +46,7 @@ public class MainFrame extends JFrame {
         CadastrarAlimentoPanel cadastrarAlimentoPanel = new CadastrarAlimentoPanel();
         registrarConsumoPanel = new RegistrarConsumoPanel();
         avaliarEquinoPanel = new AvaliarEquinoPanel();
+        historicoAvaliacoesPanel = new HistoricoAvaliacoesPanel();
 
         cadastrarEquinoPanel.setMainFrame(this);
         cadastrarAlimentoPanel.setMainFrame(this);
@@ -55,6 +58,7 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("🌿Cadastrar Alimento",  cadastrarAlimentoPanel);
         tabbedPane.addTab("Registrar Consumo",  registrarConsumoPanel);
         tabbedPane.addTab("Avaliar Balanço",  avaliarEquinoPanel);
+        tabbedPane.addTab("Histórico", historicoAvaliacoesPanel);
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
@@ -77,6 +81,10 @@ public class MainFrame extends JFrame {
                 avaliarEquinoPanel.carregarEquinos();
                 avaliarEquinoPanel.atualizarResumoDieta();
                 System.out.println("AvaliarEquinoPanel recarregado!"); // verificacao do erro 
+            }
+            if (historicoAvaliacoesPanel != null) {
+                historicoAvaliacoesPanel.carregarEquinos();
+                System.out.println("HistoricoAvaliacoesPanel recarregado!");
             }
         });
     }
