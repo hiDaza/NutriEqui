@@ -28,13 +28,19 @@ public class Consumo {
     private Alimento alimento;
 
     private double quantidadeKgPorDia;
+    private boolean incluiNoCalculoEnergetico = true;
 
     public Consumo() {}
 
     public Consumo(Equino equino, Alimento alimento, double quantidadeKgPorDia) {
+        this(equino, alimento, quantidadeKgPorDia, true);
+    }
+
+    public Consumo(Equino equino, Alimento alimento, double quantidadeKgPorDia, boolean incluiNoCalculoEnergetico) {
         this.equino = equino;
         this.alimento = alimento;
         this.quantidadeKgPorDia = quantidadeKgPorDia;
+        this.incluiNoCalculoEnergetico = incluiNoCalculoEnergetico;
     }
 
     // Getters e Setters
@@ -46,4 +52,6 @@ public class Consumo {
     public void setAlimento(Alimento alimento) { this.alimento = alimento; }
     public double getQuantidadeKgPorDia() { return quantidadeKgPorDia; }
     public void setQuantidadeKgPorDia(double quantidadeKgPorDia) { this.quantidadeKgPorDia = quantidadeKgPorDia; }
+    public boolean isIncluiNoCalculoEnergetico() { return incluiNoCalculoEnergetico; }
+    public void setIncluiNoCalculoEnergetico(boolean incluiNoCalculoEnergetico) { this.incluiNoCalculoEnergetico = incluiNoCalculoEnergetico; }
 }

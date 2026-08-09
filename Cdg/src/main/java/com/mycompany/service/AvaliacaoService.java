@@ -115,9 +115,12 @@ public class AvaliacaoService {
         return new DiagnosticoNutricional(equino, edExigida, edFornecida, saldo, classificacao, recomendacao, custoDiario, custoMensal, alertas);
     }
 
-    private double calcularFornecimento(List<Consumo> consumos) {
+    double calcularFornecimento(List<Consumo> consumos) {
         double total = 0.0;
         for (Consumo c : consumos) {
+            if (!c.isIncluiNoCalculoEnergetico()) {
+                continue;
+            }
             total += c.getAlimento().getEnergiaDigestivel() * c.getQuantidadeKgPorDia();
         }
         return total;

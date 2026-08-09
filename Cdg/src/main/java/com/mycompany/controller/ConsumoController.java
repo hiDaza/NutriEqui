@@ -22,4 +22,8 @@ public class ConsumoController {
     public String registrarConsumo(String nomeEquino, String nomeAlimento, double quantidadeKg) {
         return consumoService.registrarConsumo(nomeEquino, nomeAlimento, quantidadeKg);
     }
+
+    public String registrarSuplemento(String nomeEquino, String nomeSuplemento, double doseDiaria, boolean incluiNoCalculoEnergetico) {
+        return consumoService.registrarSuplemento(nomeEquino, nomeSuplemento, doseDiaria, incluiNoCalculoEnergetico);
+    }
 }
