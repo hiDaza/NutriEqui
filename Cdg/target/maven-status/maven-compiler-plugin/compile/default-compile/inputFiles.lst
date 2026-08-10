@@ -7,9 +7,11 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/AvaliarEquinoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/EquinoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Equino.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/AvaliacaoHistoricoRepository.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/ConsumoRepository.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/nutriequi/NutriEqui.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/CategoriaFisiologica.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/HistoricoAvaliacoesPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/ConsumoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/CategoriaVolumoso.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/RegistrarConsumoPanel.java
@@ -20,6 +22,7 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/AvaliacaoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/AlimentoRepository.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/TipoAlimento.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/AvaliacaoHistorico.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Consumo.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/AlimentoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/CadastrarEquinoPanel.java

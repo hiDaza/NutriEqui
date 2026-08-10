@@ -18,6 +18,8 @@ public class MainFrame extends JFrame {
         private RegistrarConsumoPanel registrarConsumoPanel;
         private RegistrarSuplementoPanel registrarSuplementoPanel;
         private AvaliarEquinoPanel avaliarEquinoPanel;
+        private HistoricoAvaliacoesPanel historicoAvaliacoesPanel;
+
     public MainFrame() {
         
         setTitle("NutriEqui Campo");
@@ -47,6 +49,7 @@ public class MainFrame extends JFrame {
         registrarSuplementoPanel = new RegistrarSuplementoPanel();
         avaliarEquinoPanel = new AvaliarEquinoPanel();
         RelatorioVisitaPanel relatorioVisitaPanel = new RelatorioVisitaPanel();
+        historicoAvaliacoesPanel = new HistoricoAvaliacoesPanel();
 
         cadastrarEquinoPanel.setMainFrame(this);
         cadastrarAlimentoPanel.setMainFrame(this);
@@ -60,7 +63,8 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Registrar Suplemento",  registrarSuplementoPanel);
         tabbedPane.addTab("Avaliar Balanço",  avaliarEquinoPanel);
         tabbedPane.addTab("Relatório de Visita", relatorioVisitaPanel);
-        
+        tabbedPane.addTab("Histórico", historicoAvaliacoesPanel);
+
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         JLabel footer = new JLabel("NutriEqui Campo v1.0 - MVP", SwingConstants.CENTER);
@@ -83,6 +87,10 @@ public class MainFrame extends JFrame {
             if (avaliarEquinoPanel != null) {
                 avaliarEquinoPanel.carregarEquinos();
                 avaliarEquinoPanel.atualizarResumoDieta();
+            }
+            if (historicoAvaliacoesPanel != null) {
+                historicoAvaliacoesPanel.carregarEquinos();
+                System.out.println("HistoricoAvaliacoesPanel recarregado!");
             }
         });
     }

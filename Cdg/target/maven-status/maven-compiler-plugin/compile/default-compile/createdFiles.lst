@@ -21,6 +21,7 @@ com/mycompany/domain/AlertaSeguranca$Nivel.class
 com/mycompany/service/RelatorioService.class
 com/mycompany/repository/ConsumoRepository.class
 com/mycompany/service/AvaliacaoService.class
+com/mycompany/ui/HistoricoAvaliacoesPanel.class
 com/mycompany/ui/CadastrarAlimentoPanel.class
 com/mycompany/domain/RelatorioVisita.class
 com/mycompany/repository/AlimentoRepository.class
@@ -29,6 +30,7 @@ com/mycompany/domain/CategoriaVolumoso.class
 com/mycompany/ui/RegistrarConsumoPanel.class
 com/mycompany/ui/RegistrarConsumoPanel$1.class
 com/mycompany/nutriequi/NutriEqui.class
+com/mycompany/domain/AvaliacaoHistorico.class
 com/mycompany/domain/CalculoEnergetico.class
 com/mycompany/ui/CadastrarEquinoPanel$1.class
 com/mycompany/domain/CategoriaRacao.class
@@ -37,3 +39,4 @@ com/mycompany/ui/MainFrame$1.class
 com/mycompany/service/ConsumoService.class
 com/mycompany/controller/AvaliacaoController.class
 com/mycompany/domain/CategoriaFisiologica.class
+com/mycompany/repository/AvaliacaoHistoricoRepository.class
