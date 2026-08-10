@@ -16,10 +16,11 @@ import java.util.concurrent.ExecutionException;
 
 public class MainFrame extends JFrame {
         private RegistrarConsumoPanel registrarConsumoPanel;
+        private RegistrarSuplementoPanel registrarSuplementoPanel;
         private AvaliarEquinoPanel avaliarEquinoPanel;
     public MainFrame() {
         
-        setTitle("🌾NutriEqui Campo");
+        setTitle("NutriEqui Campo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(750, 650);
         setLocationRelativeTo(null);
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame {
         CadastrarEquinoPanel cadastrarEquinoPanel = new CadastrarEquinoPanel();
         CadastrarAlimentoPanel cadastrarAlimentoPanel = new CadastrarAlimentoPanel();
         registrarConsumoPanel = new RegistrarConsumoPanel();
+        registrarSuplementoPanel = new RegistrarSuplementoPanel();
         avaliarEquinoPanel = new AvaliarEquinoPanel();
 
         cadastrarEquinoPanel.setMainFrame(this);
@@ -51,9 +53,10 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-        tabbedPane.addTab("🐴Cadastrar Equino",  cadastrarEquinoPanel);
-        tabbedPane.addTab("🌿Cadastrar Alimento",  cadastrarAlimentoPanel);
+        tabbedPane.addTab("Cadastrar Equino",  cadastrarEquinoPanel);
+        tabbedPane.addTab("Cadastrar Alimento",  cadastrarAlimentoPanel);
         tabbedPane.addTab("Registrar Consumo",  registrarConsumoPanel);
+        tabbedPane.addTab("Registrar Suplemento",  registrarSuplementoPanel);
         tabbedPane.addTab("Avaliar Balanço",  avaliarEquinoPanel);
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -71,12 +74,13 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(() -> {
             if (registrarConsumoPanel != null) {
                 registrarConsumoPanel.carregarDados();
-                System.out.println("RegistrarConsumoPanel recarregado!"); // verificacao do erro
+            }
+            if (registrarSuplementoPanel != null) {
+                registrarSuplementoPanel.carregarDados();
             }
             if (avaliarEquinoPanel != null) {
                 avaliarEquinoPanel.carregarEquinos();
                 avaliarEquinoPanel.atualizarResumoDieta();
-                System.out.println("AvaliarEquinoPanel recarregado!"); // verificacao do erro 
             }
         });
     }
