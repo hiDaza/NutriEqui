@@ -1,5 +1,8 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/ConsumoService.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/CategoriaRacao.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/RelatorioVisita.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/RelatorioController.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/AlertaSeguranca.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/TipoVolumoso.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/AvaliarEquinoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/EquinoController.java
@@ -12,6 +15,7 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/RegistrarConsumoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/Alimento.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/JpaUtil.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/avaliarEquinoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/CadastrarAlimentoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/controller/AvaliacaoController.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/AlimentoRepository.java
@@ -23,6 +27,9 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/CalculoEnergetico.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/UnidadeSuplemento.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/DiagnosticoNutricional.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/RegistrarSuplementoPanel.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/AvaliacaoService.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/MainFrame.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/EquinoRepository.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/service/RelatorioService.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/ui/RelatorioVisitaPanel.java

@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
         
         setTitle("NutriEqui Campo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(750, 650);
+        setSize(850, 700); //ajustar conforme for aumentando as abas se necessário
         setLocationRelativeTo(null);
 
         try {
@@ -46,6 +46,7 @@ public class MainFrame extends JFrame {
         registrarConsumoPanel = new RegistrarConsumoPanel();
         registrarSuplementoPanel = new RegistrarSuplementoPanel();
         avaliarEquinoPanel = new AvaliarEquinoPanel();
+        RelatorioVisitaPanel relatorioVisitaPanel = new RelatorioVisitaPanel();
 
         cadastrarEquinoPanel.setMainFrame(this);
         cadastrarAlimentoPanel.setMainFrame(this);
@@ -58,7 +59,8 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Registrar Consumo",  registrarConsumoPanel);
         tabbedPane.addTab("Registrar Suplemento",  registrarSuplementoPanel);
         tabbedPane.addTab("Avaliar Balanço",  avaliarEquinoPanel);
-
+        tabbedPane.addTab("Relatório de Visita", relatorioVisitaPanel);
+        
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         JLabel footer = new JLabel("NutriEqui Campo v1.0 - MVP", SwingConstants.CENTER);
