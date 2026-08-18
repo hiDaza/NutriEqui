@@ -24,7 +24,8 @@ public class DiagnosticoNutricional {
     private List<String> alertas;
 
     public DiagnosticoNutricional(Equino equino, double edExigida, double edFornecida,
-                                  double saldo, String classificacao, String recomendacao, double custoDiario, double custoMensal, List<String> alertas) {
+                                  double saldo, String classificacao, String recomendacao, 
+                                  double custoDiario, double custoMensal, List<String> alertas) {
         this.equino = equino;
         this.edExigida = edExigida;
         this.edFornecida = edFornecida;
@@ -36,7 +37,6 @@ public class DiagnosticoNutricional {
         this.alertas = alertas != null ? alertas : Collections.emptyList();
     }
 
-    // Getters
     public Equino getEquino() { return equino; }
     public double getEdExigida() { return edExigida; }
     public double getEdFornecida() { return edFornecida; }
@@ -46,4 +46,24 @@ public class DiagnosticoNutricional {
     public double getCustoDiario() { return custoDiario; }
     public double getCustoMensal() { return custoMensal; }
     public List<String> getAlertas() { return alertas; }
-}   
+
+    public double getBalançoEnergia() { 
+        return this.saldo; 
+    }
+
+    public String getDiagnosticoTexto() { 
+        return this.classificacao; 
+    }
+
+    public double getEnergiaFornecida() { 
+        return this.edFornecida; 
+    }
+
+    public double getEnergiaExigida() { 
+        return this.edExigida; 
+    }
+
+    public double getConsumoMateriaSecaFormatado() { 
+        return this.edFornecida; 
+    }
+}

@@ -96,6 +96,29 @@
                 </systemPropertyVariables>
             </configuration>
             </plugin>
+            
+            <!--Para mutacoes -->
+            <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.15.3</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-junit5-plugin</artifactId>
+                    <version>1.2.1</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <targetClasses>
+                    <param>com.mycompany.service.*</param>
+                    <param>com.mycompany.controller.*</param>
+                </targetClasses>
+                <targetTests>
+                    <param>com.mycompany.testes.*</param>
+                </targetTests>
+            </configuration>
+        </plugin>
 
             <!-- Plugin para rodar a interface principal do projeto -->
             <plugin>

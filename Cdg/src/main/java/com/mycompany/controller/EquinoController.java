@@ -18,6 +18,7 @@ import com.mycompany.repository.PropriedadeRepository;
 public class EquinoController {
 
     private final EquinoRepository equinoRepository;
+    private PropriedadeRepository propriedadeRepository;
 
     public EquinoController() {
         this(new EquinoRepository());
@@ -25,6 +26,12 @@ public class EquinoController {
 
     public EquinoController(EquinoRepository equinoRepository) {
         this.equinoRepository = equinoRepository;
+    }
+    
+    //para injecao
+    public EquinoController(EquinoRepository equinoRepository, PropriedadeRepository propriedadeRepository) {
+        this.equinoRepository = equinoRepository;
+        this.propriedadeRepository = propriedadeRepository;
     }
 
     public String cadastrarEquino(String nome, double peso, int score, CategoriaFisiologica categoria,String nomePropriedade) {

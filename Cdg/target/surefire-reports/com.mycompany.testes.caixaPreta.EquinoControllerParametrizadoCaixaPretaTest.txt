@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.mycompany.testes.caixaPreta.EquinoControllerParametrizadoCaixaPretaTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.711 s -- in com.mycompany.testes.caixaPreta.EquinoControllerParametrizadoCaixaPretaTest

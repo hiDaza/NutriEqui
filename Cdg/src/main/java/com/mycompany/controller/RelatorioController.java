@@ -10,6 +10,11 @@ public class RelatorioController {
     public RelatorioController() {
         this.relatorioService = new RelatorioService();
     }
+    
+    //para injecao
+    public RelatorioController(RelatorioService relatorioService) {
+        this.relatorioService = relatorioService;
+    }
 
     public RelatorioVisita gerarRelatorioGeral() {
         return relatorioService.gerarRelatorioLoteCompleto();
