@@ -20,6 +20,7 @@ package com.mycompany.domain;
     POTRO_DESMAME,
     POTRO_ATE_1_ANO,
     POTRO_ATE_2_ANOS,
-    GARANHAO_MONTA;
+    GARANHAO_MONTA,
+    IDOSO;
 }
 

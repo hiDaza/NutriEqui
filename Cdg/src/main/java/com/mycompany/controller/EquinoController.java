@@ -11,8 +11,9 @@ package com.mycompany.controller;
 
 import com.mycompany.domain.CategoriaFisiologica;
 import com.mycompany.domain.Equino;
+import com.mycompany.domain.Propriedade;
 import com.mycompany.repository.EquinoRepository;
-import java.util.Locale;
+import com.mycompany.repository.PropriedadeRepository;
 
 public class EquinoController {
 
@@ -26,7 +27,7 @@ public class EquinoController {
         this.equinoRepository = equinoRepository;
     }
 
-    public String cadastrarEquino(String nome, double peso, int score, CategoriaFisiologica categoria) {
+    public String cadastrarEquino(String nome, double peso, int score, CategoriaFisiologica categoria,String nomePropriedade) {
         if (nome == null) {
             return "Erro: Informe um nome válido para o equino.";
         }
@@ -51,8 +52,17 @@ public class EquinoController {
         if (equinoRepository.buscarPorNome(nomeNormalizado) != null) {
             return "Erro: Já existe um equino com este nome.";
         }
+        
+        Propriedade propriedade = null;
+        if(nomePropriedade != null && !nomePropriedade.trim().isEmpty()){
+            propriedade = new PropriedadeRepository().buscarPorNome(nomePropriedade.trim());
+            if(propriedade == null){
+                return "Err: Propriedade não encontrada. Cadastre a Propriedade primeiro.";
+            }
+        }
 
         Equino equino = new Equino(nomeNormalizado, peso, score, categoria);
+        equino.setPropriedade(propriedade);
         try {
             equinoRepository.salvar(equino);
         } catch (Exception e) {

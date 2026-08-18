@@ -14,4 +14,8 @@ public class RelatorioController {
     public RelatorioVisita gerarRelatorioGeral() {
         return relatorioService.gerarRelatorioLoteCompleto();
     }
+
+    public RelatorioVisita gerarRelatorioPorPropriedade(String nomePropriedade) {
+        return relatorioService.gerarRelatorioPorPropriedade(nomePropriedade);
+    }
 }

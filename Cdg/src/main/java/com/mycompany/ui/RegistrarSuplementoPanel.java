@@ -1,3 +1,5 @@
+/*
+
 package com.mycompany.ui;
 
 import com.mycompany.controller.ConsumoController;
@@ -229,3 +231,4 @@ public class RegistrarSuplementoPanel extends JPanel {
         new Timer(5000, e -> lblMensagem.setText(" ")).start();
     }
 }
+*/

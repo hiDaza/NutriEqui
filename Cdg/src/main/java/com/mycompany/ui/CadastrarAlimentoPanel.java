@@ -313,7 +313,7 @@ public class CadastrarAlimentoPanel extends JPanel {
             }
 
             if (resultado.startsWith("Erro")) {
-                exibirMensagem(" " + resultado, Color.RED);
+                exibirMensagem("" + resultado, Color.RED);
             } else {
                 exibirMensagem("Alimento Cadastrado com Sucesso", new Color(0, 150, 136)); //removi o +resultado pois o usuario nao tem necessidade de saber de ID ou resultados do sistema interno
                 limparCampos();
@@ -487,6 +487,6 @@ public class CadastrarAlimentoPanel extends JPanel {
     private void exibirMensagem(String texto, Color cor) {
         lblMensagem.setText(texto);
         lblMensagem.setForeground(cor);
-        new Timer(5000, e -> lblMensagem.setText(" ")).start();
+        new Timer(2000, e -> lblMensagem.setText(" ")).start();
     }
 }

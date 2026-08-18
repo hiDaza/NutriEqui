@@ -15,10 +15,15 @@ import javax.swing.*;
 import java.util.concurrent.ExecutionException;
 
 public class MainFrame extends JFrame {
-        private RegistrarConsumoPanel registrarConsumoPanel;
-        private RegistrarSuplementoPanel registrarSuplementoPanel;
-        private AvaliarEquinoPanel avaliarEquinoPanel;
-        private HistoricoAvaliacoesPanel historicoAvaliacoesPanel;
+        private final RegistrarConsumoPanel registrarConsumoPanel;
+       // private final RegistrarSuplementoPanel registrarSuplementoPanel;
+        private final AvaliarEquinoPanel avaliarEquinoPanel;
+        private final HistoricoAvaliacoesPanel historicoAvaliacoesPanel;
+        private final CadastrarPropriedadePanel cadastrarPropriedadePanel;
+        private final CadastrarEquinoPanel cadastrarEquinoPanel;
+        private final CadastrarAlimentoPanel cadastrarAlimentoPanel;
+        private final RelatorioVisitaPanel relatorioVisitaPanel;
+        
 
     public MainFrame() {
         
@@ -42,27 +47,30 @@ public class MainFrame extends JFrame {
             }
         }
         
-        
-        CadastrarEquinoPanel cadastrarEquinoPanel = new CadastrarEquinoPanel();
-        CadastrarAlimentoPanel cadastrarAlimentoPanel = new CadastrarAlimentoPanel();
+        cadastrarPropriedadePanel = new CadastrarPropriedadePanel();
+        cadastrarEquinoPanel = new CadastrarEquinoPanel();
+        cadastrarAlimentoPanel = new CadastrarAlimentoPanel();
         registrarConsumoPanel = new RegistrarConsumoPanel();
-        registrarSuplementoPanel = new RegistrarSuplementoPanel();
+       // registrarSuplementoPanel = new RegistrarSuplementoPanel();
         avaliarEquinoPanel = new AvaliarEquinoPanel();
-        RelatorioVisitaPanel relatorioVisitaPanel = new RelatorioVisitaPanel();
+        relatorioVisitaPanel = new RelatorioVisitaPanel();
         historicoAvaliacoesPanel = new HistoricoAvaliacoesPanel();
-
+        
+        cadastrarPropriedadePanel.setMainFrame(this);
         cadastrarEquinoPanel.setMainFrame(this);
         cadastrarAlimentoPanel.setMainFrame(this);
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 13));
-
+        
+        tabbedPane.addTab("Propriedade", cadastrarPropriedadePanel);
         tabbedPane.addTab("Cadastrar Equino",  cadastrarEquinoPanel);
         tabbedPane.addTab("Cadastrar Alimento",  cadastrarAlimentoPanel);
         tabbedPane.addTab("Registrar Consumo",  registrarConsumoPanel);
-        tabbedPane.addTab("Registrar Suplemento",  registrarSuplementoPanel);
+//        tabbedPane.addTab("Registrar Suplemento",  registrarSuplementoPanel);
         tabbedPane.addTab("Avaliar Balanço",  avaliarEquinoPanel);
         tabbedPane.addTab("Relatório de Visita", relatorioVisitaPanel);
+
         tabbedPane.addTab("Histórico", historicoAvaliacoesPanel);
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -81,9 +89,11 @@ public class MainFrame extends JFrame {
             if (registrarConsumoPanel != null) {
                 registrarConsumoPanel.carregarDados();
             }
+            /*
             if (registrarSuplementoPanel != null) {
                 registrarSuplementoPanel.carregarDados();
             }
+                */
             if (avaliarEquinoPanel != null) {
                 avaliarEquinoPanel.carregarEquinos();
                 avaliarEquinoPanel.atualizarResumoDieta();
@@ -115,7 +125,7 @@ public class MainFrame extends JFrame {
         panel.add(progressBar, BorderLayout.CENTER);
 
         // Texto de status
-        JLabel labelStatus = new JLabel("Carregando sistema e conectando ao banco de dados...", SwingConstants.CENTER);
+        JLabel labelStatus = new JLabel("Carregando sistema...", SwingConstants.CENTER);
         labelStatus.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         labelStatus.setForeground(Color.GRAY);
         panel.add(labelStatus, BorderLayout.SOUTH);
@@ -157,4 +167,14 @@ public class MainFrame extends JFrame {
 
         worker.execute();
     }
+    
+    
+       public void recarregarPropriedades() {
+            if (cadastrarEquinoPanel != null) {
+                cadastrarEquinoPanel.recarregarPropriedades();
+            }
+            if (relatorioVisitaPanel != null) {
+                relatorioVisitaPanel.recarregarPropriedades();
+            }
+        }
 }

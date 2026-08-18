@@ -8,8 +8,8 @@ package com.mycompany.repository;
  *
  * @author daza
  */
-
 import com.mycompany.domain.Equino;
+import com.mycompany.domain.Propriedade;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
@@ -56,6 +56,30 @@ public class EquinoRepository {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             return em.createQuery("SELECT e FROM Equino e", Equino.class).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<Equino> buscarPorPropriedade(Propriedade propriedade) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Equino> query = em.createQuery(
+                    "SELECT e FROM Equino e WHERE e.propriedade = :propriedade", Equino.class);
+            query.setParameter("propriedade", propriedade);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<Equino> buscarPorPropriedadeNome(String nomePropriedade) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Equino> query = em.createQuery(
+                    "SELECT e FROM Equino e WHERE e.propriedade.nome = :nome", Equino.class);
+            query.setParameter("nome", nomePropriedade);
+            return query.getResultList();
         } finally {
             em.close();
         }

@@ -25,6 +25,9 @@ public class Equino {
     private int numeroRefeicoesPorDia;
     @Enumerated(EnumType.STRING)
     private CategoriaFisiologica categoria;
+    @ManyToOne
+    @JoinColumn(name = "propriedade_id")
+    private Propriedade propriedade;
 
     @OneToMany(mappedBy = "equino", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consumo> consumos = new ArrayList<>();
@@ -66,4 +69,7 @@ public class Equino {
     public void setCategoria(CategoriaFisiologica categoria) { this.categoria = categoria; }
     public List<Consumo> getConsumos() { return consumos; }
     public void setConsumos(List<Consumo> consumos) { this.consumos = consumos; }
+    public Propriedade getPropriedade() { return propriedade; }
+    public void setPropriedade(Propriedade propriedade) { this.propriedade = propriedade; }
+    public void setNumeroRefeicoesPorDia(int numeroRefeicoesPorDia){ this.numeroRefeicoesPorDia = numeroRefeicoesPorDia; }
 }

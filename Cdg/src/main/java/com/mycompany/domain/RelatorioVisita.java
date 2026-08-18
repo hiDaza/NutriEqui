@@ -15,10 +15,11 @@ public class RelatorioVisita {
     private double custoDiarioTotalLote;
     private double custoMensalTotalLote;
     private List<DiagnosticoNutricional> diagnosticos;
+    private String nomePropriedade;
 
     public RelatorioVisita(LocalDate dataVisita, int totalEquinosAvaliados, int quantidadeAdequados, 
                             int quantidadeDeficit, int quantidadeExcesso, double custoDiarioTotalLote, 
-                            double custoMensalTotalLote, List<DiagnosticoNutricional> diagnosticos) {
+                            double custoMensalTotalLote, List<DiagnosticoNutricional> diagnosticos, String nomePropriedade) {
         this.dataVisita = dataVisita != null ? dataVisita : LocalDate.now();
         this.totalEquinosAvaliados = totalEquinosAvaliados;
         this.quantidadeAdequados = quantidadeAdequados;
@@ -27,6 +28,7 @@ public class RelatorioVisita {
         this.custoDiarioTotalLote = custoDiarioTotalLote;
         this.custoMensalTotalLote = custoMensalTotalLote;
         this.diagnosticos = diagnosticos != null ? diagnosticos : Collections.emptyList();
+        this.nomePropriedade = nomePropriedade;
     }
 
     public String gerarTextoFormatado() {
@@ -36,6 +38,7 @@ public class RelatorioVisita {
         sb.append("===============================================================\n");
         sb.append("            RELATÓRIO DE VISITA TÉCNICA - NUTRIEQUI            \n");
         sb.append("===============================================================\n");
+        sb.append(String.format("Propriedade: %s \n", nomePropriedade));
         sb.append(String.format("Data da Visita: %s\n", dataVisita.format(fmt)));
         sb.append(String.format("Total de Equinos Avaliados: %d\n", totalEquinosAvaliados));
         sb.append("---------------------------------------------------------------\n");
@@ -86,4 +89,5 @@ public class RelatorioVisita {
     public double getCustoDiarioTotalLote() { return custoDiarioTotalLote; }
     public double getCustoMensalTotalLote() { return custoMensalTotalLote; }
     public List<DiagnosticoNutricional> getDiagnosticos() { return diagnosticos; }
+    public String getNomePropriedade() {return nomePropriedade; } 
 }

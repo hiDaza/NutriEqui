@@ -27,6 +27,13 @@ public class ConsumoService {
         this.alimentoRepository = new AlimentoRepository();
         this.consumoRepository = new ConsumoRepository();
     }
+    
+    //para injeção
+    public ConsumoService(EquinoRepository equinoRepository, AlimentoRepository alimentoRepository, ConsumoRepository consumoRepository) {
+        this.equinoRepository = equinoRepository;
+        this.alimentoRepository = alimentoRepository;
+        this.consumoRepository = consumoRepository;
+    }
 
     public String registrarConsumo(String nomeEquino, String nomeAlimento, double quantidadeKg) {
         Equino equino = obterEquino(nomeEquino);

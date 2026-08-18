@@ -1,8 +1,6 @@
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/UIFlowTestLauncher.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/TesteBalancoAbsurdo.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/TestePersistencia.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/EquinoCadastroTest.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/RegistrarConsumoTest.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/UITestLauncher.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/TesteValidacaoMultiCenario.java
-/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/service/AvaliacaoServiceTest.java
+/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/testes/funcionais/FluxoCompletoTest.java
+/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/testes/funcionais/TesteAlertas.java
+/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/testes/integracao/EquinoRepositoryTest.java
+/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/testes/integracao/JpaTestUtil.java
+/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/testes/unitarios/AvaliacaoServiceTest.java
+/home/daza/projetos/NutriEqui/Cdg/src/test/java/com/mycompany/testes/unitarios/ConsumoServiceTest.java

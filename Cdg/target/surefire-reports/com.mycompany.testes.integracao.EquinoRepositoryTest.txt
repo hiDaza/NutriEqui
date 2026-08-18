@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+Test set: com.mycompany.testes.integracao.EquinoRepositoryTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.003 s <<< FAILURE! -- in com.mycompany.testes.integracao.EquinoRepositoryTest
+com.mycompany.testes.integracao.EquinoRepositoryTest.testSalvarEBuscarEquino -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.IllegalArgumentException: org.hibernate.query.sqm.UnknownEntityException: Could not resolve target entity 'Consumo'
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:138)
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:162)
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:168)
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:795)
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:704)
+	at org.hibernate.internal.SessionImpl.createQuery(SessionImpl.java:190)
+	at com.mycompany.testes.integracao.EquinoRepositoryTest.limpar(EquinoRepositoryTest.java:29)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: org.hibernate.query.sqm.UnknownEntityException: Could not resolve target entity 'Consumo'
+	at org.hibernate.query.hql.internal.SemanticQueryBuilder.visitEntityName(SemanticQueryBuilder.java:1836)
+	at org.hibernate.query.hql.internal.SemanticQueryBuilder.visitTargetEntity(SemanticQueryBuilder.java:443)
+	at org.hibernate.query.hql.internal.SemanticQueryBuilder.visitDeleteStatement(SemanticQueryBuilder.java:622)
+	at org.hibernate.query.hql.internal.SemanticQueryBuilder.visitStatement(SemanticQueryBuilder.java:388)
+	at org.hibernate.query.hql.internal.SemanticQueryBuilder.buildSemanticModel(SemanticQueryBuilder.java:295)
+	at org.hibernate.query.hql.internal.StandardHqlTranslator.translate(StandardHqlTranslator.java:81)
+	at org.hibernate.internal.AbstractSharedSessionContract.lambda$interpretHql$2(AbstractSharedSessionContract.java:744)
+	at org.hibernate.query.internal.QueryInterpretationCacheStandardImpl.createHqlInterpretation(QueryInterpretationCacheStandardImpl.java:141)
+	at org.hibernate.query.internal.QueryInterpretationCacheStandardImpl.resolveHqlInterpretation(QueryInterpretationCacheStandardImpl.java:128)
+	at org.hibernate.internal.AbstractSharedSessionContract.interpretHql(AbstractSharedSessionContract.java:741)
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:786)
+	... 6 more
+

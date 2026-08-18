@@ -11,7 +11,9 @@ package com.mycompany.ui;
 
 
 import com.mycompany.controller.EquinoController;
+import com.mycompany.controller.PropriedadeController;
 import com.mycompany.domain.CategoriaFisiologica;
+import com.mycompany.domain.Propriedade;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,6 +22,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -44,6 +47,8 @@ public class CadastrarEquinoPanel extends JPanel {
     private JComboBox<CategoriaFisiologica> cbCategoria;
     private JButton btnCadastrar;
     private JLabel lblMensagem;
+    private JComboBox<String> cbPropriedades;
+    private final PropriedadeController propriedadeController = new PropriedadeController();
 
     
     public void setMainFrame(MainFrame mainFrame){
@@ -157,6 +162,19 @@ public class CadastrarEquinoPanel extends JPanel {
         cbCategoria.setToolTipText("Selecione a categoria que melhor descreve o cavalo");
         estilizarCombo(cbCategoria);
         add(cbCategoria, gbc);
+        
+        //Propriedade
+        gbc.gridy++;
+        gbc.gridx = 0;
+        add(new JLabel("Propriedade"), gbc);
+        gbc.gridx = 1;
+        cbPropriedades = new JComboBox<>();
+        cbPropriedades.addItem("Nenhuma");
+        for (Propriedade p : propriedadeController.listarPropriedades()) {
+            cbPropriedades.addItem(p.getNome());
+        }
+        estilizarCombo(cbPropriedades);
+        add(cbPropriedades, gbc);
 
         // Botão
         gbc.gridy++;
@@ -267,7 +285,12 @@ public class CadastrarEquinoPanel extends JPanel {
         int score = sliderScore.getValue();
         CategoriaFisiologica categoria = (CategoriaFisiologica) cbCategoria.getSelectedItem();
 
-        String resultado = equinoController.cadastrarEquino(nome, peso, score, categoria);
+        String nomeProp = (String) cbPropriedades.getSelectedItem();
+        if(nomeProp != null && nomeProp.equals("Nenhuma")){
+            nomeProp = null;
+        }
+        
+        String resultado = equinoController.cadastrarEquino(nome, peso, score, categoria,nomeProp);
 
         if (resultado.startsWith("Erro")) {
             exibirMensagem(resultado, Color.RED);
@@ -290,6 +313,21 @@ public class CadastrarEquinoPanel extends JPanel {
     private void exibirMensagem(String texto, Color cor) {
         lblMensagem.setText(texto);
         lblMensagem.setForeground(cor);
-        new Timer(5000, e -> lblMensagem.setText(" ")).start();
+        new Timer(2000, e -> lblMensagem.setText(" ")).start();
+    }
+    
+    public void recarregarPropriedades() {
+        // recarregar o combo de propriedades
+        cbPropriedades.removeAllItems();
+        cbPropriedades.addItem("Nenhuma");
+        List<Propriedade> props = propriedadeController.listarPropriedades();
+        for (Propriedade p : props) {
+            cbPropriedades.addItem(p.getNome());
+        }
+        if (cbPropriedades.getItemCount() == 1) {
+            cbPropriedades.setSelectedIndex(0);
+        } else {
+            cbPropriedades.setSelectedIndex(0);
+        }
     }
 }

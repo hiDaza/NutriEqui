@@ -26,6 +26,16 @@ public class AvaliacaoService {
         this.consumoRepository = new ConsumoRepository();
         this.avaliacaoHistoricoRepository = new AvaliacaoHistoricoRepository();
     }
+    
+    
+    //para injecao
+    public AvaliacaoService(ConsumoRepository consumoRepository,
+                            AvaliacaoHistoricoRepository avaliacaoHistoricoRepository) {
+        this.consumoRepository = consumoRepository;
+        this.avaliacaoHistoricoRepository = avaliacaoHistoricoRepository;
+    }
+    
+    
 
     private double calcularExigencia(Equino equino) {
         double peso = equino.getPeso();
@@ -54,6 +64,9 @@ public class AvaliacaoService {
 
             // garanhões
             case GARANHAO_MONTA -> base * 1.4; //
+                
+            // idoso 
+            case IDOSO -> base; //conforme a condição corporal
 
             // se nao mapeado retorna com aviso
             default -> base;
@@ -66,6 +79,8 @@ public class AvaliacaoService {
             case GESTANTE_INICIO, GESTANTE_FINAL, LACTANTE,
                  POTRO_DESMAME, POTRO_ATE_1_ANO, POTRO_ATE_2_ANOS ->
                 "A análise energética isolada não é suficiente. Avalie também proteína, lisina, cálcio, fósforo, cobre, zinco, selênio e vitamina E.";
+            
+            case IDOSO -> "Recomendada avaliação dentária e clínica para equino idoso";
 
             default -> "";
         };
@@ -79,6 +94,9 @@ public class AvaliacaoService {
         
         // Cálculo de custo
         double custoDiario = 0.0;
+        
+        double saldo = edFornecida - edExigida;
+        
         for (Consumo c : consumos) {
             Double preco = c.getAlimento().getPrecoPorKg();
             if (preco != null && preco > 0) {
@@ -88,9 +106,9 @@ public class AvaliacaoService {
         double custoMensal = custoDiario * 30;
 
         // Geração de alertas de segurança 
-        List<String> alertas = gerarAlertasSeguranca(equino, consumos);
+        List<String> alertas = gerarAlertasSeguranca(equino, consumos,saldo);
         
-        double saldo = edFornecida - edExigida;
+
 
         // Tolerância de ±0,5 Mcal
         double tolerancia = 0.5;
@@ -192,18 +210,25 @@ public class AvaliacaoService {
         return sb.toString().trim();
     }
     
-    
-        private List<String> gerarAlertasSeguranca(Equino equino, List<Consumo> consumos) {
+
+    private List<String> gerarAlertasSeguranca(Equino equino, List<Consumo> consumos, double saldo) {
         List<String> alertas = new ArrayList<>();
 
-        // 1. Baixo fornecimento de volumoso (mínimo 1,5% do peso)
         double peso = equino.getPeso();
         double minimoVolumoso = peso * 0.015;
         double totalVolumoso = 0.0;
         double maiorConcentradoRefeicao = 0.0;
+        int contadorSuplementos = 0;
         int numRefeicoes = Math.max(equino.getNumeroRefeicoesPorDia() > 0 ? equino.getNumeroRefeicoesPorDia() : 2, 1);
+
         for (Consumo c : consumos) {
             Alimento a = c.getAlimento();
+
+            // Alerta: ED faltando
+            if (a.getEnergiaDigestivel() <= 0 && c.isIncluiNoCalculoEnergetico()) {
+                alertas.add(String.format("Composição incompleta: O alimento '%s' está sem o valor de Energia Digestível (ED) cadastrado.", a.getNome()));
+            }
+
             if (a.getTipo() == TipoAlimento.VOLUMOSO) {
                 totalVolumoso += c.getQuantidadeKgPorDia();
             } else if (a.getTipo() == TipoAlimento.RACAO) {
@@ -211,20 +236,28 @@ public class AvaliacaoService {
                 if (porRefeicao > maiorConcentradoRefeicao) {
                     maiorConcentradoRefeicao = porRefeicao;
                 }
+            } else if (a.getTipo() == TipoAlimento.SUPLEMENTO) {
+                contadorSuplementos++;
             }
         }
 
+        //Baixo volumoso
         if (totalVolumoso < minimoVolumoso) {
-            alertas.add(String.format("⚠️ Volumoso abaixo do mínimo recomendado. (Ofertado: %.2f kg | Mínimo: %.2f kg)", totalVolumoso, minimoVolumoso));
+            alertas.add(String.format("Baixo fornecimento de volumoso! Ofertado: %.2f kg | Mínimo recomendado: %.2f kg (1,5%% do PV). Risco de distúrbios digestivos e cólica.", totalVolumoso, minimoVolumoso));
         }
 
-        // 2. Excesso de concentrado por refeição (0,5 kg/100 kg PV)
+        //Excesso de concentrado por refeição
         double limiteConcentrado = (peso / 100.0) * 0.5;
         if (maiorConcentradoRefeicao > limiteConcentrado) {
-            alertas.add(String.format("⚠️ Excesso de concentrado por refeição. (Maior trato: %.2f kg | Limite: %.2f kg). Divida em mais refeições.", maiorConcentradoRefeicao, limiteConcentrado));
+            alertas.add(String.format("Excesso de concentrado por refeição! Maior trato: %.2f kg | Limite seguro: %.2f kg. Divida a ração em mais refeições diárias.", maiorConcentradoRefeicao, limiteConcentrado));
         }
 
-        // 3. Categorias especiais que exigem avaliação adicional
+        // 3. Sobreposição de suplementos
+        if (contadorSuplementos > 1) {
+            alertas.add("Possível sobreposição de suplementos! Mais de um suplemento cadastrado na dieta. Verifique o risco de duplicidade de minerais e vitaminas.");
+        }
+
+        //categorias especiais (gestante, lactante, potro)
         CategoriaFisiologica cat = equino.getCategoria();
         if (cat == CategoriaFisiologica.GESTANTE_INICIO ||
             cat == CategoriaFisiologica.GESTANTE_FINAL ||
@@ -232,7 +265,17 @@ public class AvaliacaoService {
             cat == CategoriaFisiologica.POTRO_DESMAME ||
             cat == CategoriaFisiologica.POTRO_ATE_1_ANO ||
             cat == CategoriaFisiologica.POTRO_ATE_2_ANOS) {
-            alertas.add("⚠️ Categoria especial: A análise energética isolada é insuficiente. Avalie também proteína, cálcio, fósforo e minerais.");
+            alertas.add("Categoria especial: A análise energética isolada é insuficiente. Avalie também Proteína Bruta, Lisina, Cálcio, Fósforo e Microminerais.");
+        }
+
+        //Idoso com perda de peso
+        if (cat == CategoriaFisiologica.IDOSO) {
+            alertas.add("Recomendada avaliação dentária e clínica para equino idoso.");
+        }
+
+        //Excesso energético + ECC alto (>= 7)
+        if (saldo > 0.5 && equino.getScoreCorporal() >= 7) {
+            alertas.add("Excesso energético combinado com ECC elevado. Evitar o aumento de ração; reavaliar o manejo.");
         }
 
         return alertas;

@@ -294,6 +294,6 @@ public class RegistrarConsumoPanel extends JPanel {
     private void exibirMensagem(String texto, Color cor) {
         lblMensagem.setText(texto);
         lblMensagem.setForeground(cor);
-        new Timer(5000, e -> lblMensagem.setText(" ")).start();
+        new Timer(2000, e -> lblMensagem.setText(" ")).start();
     }
 }
