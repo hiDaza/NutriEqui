@@ -55,6 +55,7 @@ public class MainFrame extends JFrame {
         avaliarEquinoPanel = new AvaliarEquinoPanel();
         relatorioVisitaPanel = new RelatorioVisitaPanel();
         historicoAvaliacoesPanel = new HistoricoAvaliacoesPanel();
+        LeituraRotuloPanel leituraRotuloPanel = new LeituraRotuloPanel();
         
         cadastrarPropriedadePanel.setMainFrame(this);
         cadastrarEquinoPanel.setMainFrame(this);
@@ -72,6 +73,7 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Relatório de Visita", relatorioVisitaPanel);
 
         tabbedPane.addTab("Histórico", historicoAvaliacoesPanel);
+        tabbedPane.addTab("Leitura de Rótulos", leituraRotuloPanel);
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 

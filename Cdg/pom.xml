@@ -61,7 +61,7 @@
               <groupId>net.bytebuddy</groupId>
               <artifactId>byte-buddy</artifactId>
               <version>1.14.15</version>
-              <scope>test</scope>
+            <!--   <scope>test</scope> -->
           </dependency>
           <!-- H2 para testes de integração em memória (sem MySQL) -->
           <dependency>
@@ -72,7 +72,20 @@
           </dependency>
 
         
-        
+        <!-- para ler pdf -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- para as imagens
+        <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>5.4.1</version>
+        </dependency>
+ -->
         
     </dependencies>
 
