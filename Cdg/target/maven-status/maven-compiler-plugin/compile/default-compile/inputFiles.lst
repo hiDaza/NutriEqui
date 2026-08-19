@@ -20,6 +20,7 @@
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/TipoAlimento.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/TipoVolumoso.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/UnidadeSuplemento.java
+/home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/domain/dto/AlimentoDTO.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/nutriequi/NutriEqui.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/AlimentoRepository.java
 /home/daza/projetos/NutriEqui/Cdg/src/main/java/com/mycompany/repository/AvaliacaoHistoricoRepository.java

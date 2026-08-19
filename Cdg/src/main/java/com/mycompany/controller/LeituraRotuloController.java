@@ -8,7 +8,9 @@ package com.mycompany.controller;
  *
  * @author daza
  */
+import com.mycompany.domain.dto.AlimentoDTO;
 import com.mycompany.service.LeituraRotuloService;
+import com.mycompany.service.LeituraRotuloService.ResultadoLeituraRotulo;
 
 import java.io.File;
 
@@ -22,5 +24,10 @@ public class LeituraRotuloController {
 
     public LeituraRotuloService.ResultadoLeituraRotulo processarArquivo(File file, String nomeOriginal) throws Exception {
         return leituraRotuloService.processarArquivo(file, nomeOriginal);
+    }
+    
+    public AlimentoDTO processarArquivoParaAlimento(File file, String nomeOriginal) throws Exception {
+        ResultadoLeituraRotulo resultado = leituraRotuloService.processarArquivo(file, nomeOriginal);
+        return leituraRotuloService.parseTextoParaAlimento(resultado.getTextoExtraido());
     }
 }

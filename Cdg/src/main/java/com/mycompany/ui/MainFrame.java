@@ -57,6 +57,7 @@ public class MainFrame extends JFrame {
         historicoAvaliacoesPanel = new HistoricoAvaliacoesPanel();
         LeituraRotuloPanel leituraRotuloPanel = new LeituraRotuloPanel();
         
+        leituraRotuloPanel.setMainFrame(this);
         cadastrarPropriedadePanel.setMainFrame(this);
         cadastrarEquinoPanel.setMainFrame(this);
         cadastrarAlimentoPanel.setMainFrame(this);

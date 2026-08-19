@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.ui;
 
-/**
- *
- * @author daza
- */
+import com.mycompany.controller.AlimentoController;
 import com.mycompany.controller.LeituraRotuloController;
+import com.mycompany.domain.TipoAlimento;
+import com.mycompany.domain.dto.AlimentoDTO;
 import com.mycompany.service.LeituraRotuloService;
 
 import javax.swing.*;
@@ -23,11 +18,17 @@ public class LeituraRotuloPanel extends JPanel {
     private JLabel lblCaminhoArquivo;
     private JButton btnSelecionarArquivo;
     private JButton btnProcessar;
+    private JButton btnCadastrar;
     private File arquivoSelecionado;
+    private MainFrame mainFrame;
 
     public LeituraRotuloPanel() {
         this.controller = new LeituraRotuloController();
         initComponents();
+    }
+
+    public void setMainFrame(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
     }
 
     private void initComponents() {
@@ -70,13 +71,23 @@ public class LeituraRotuloPanel extends JPanel {
         lblCaminhoArquivo.setForeground(Color.GRAY);
         add(lblCaminhoArquivo, gbc);
 
-        // Botão processar
+        // Painel de botões (Extrair + Cadastrar)
         gbc.gridy++;
         gbc.gridx = 1;
+        JPanel panelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+        panelBotoes.setOpaque(false);
+
         btnProcessar = new JButton("Extrair Informações");
         btnProcessar.setEnabled(false);
         btnProcessar.addActionListener(e -> processarArquivo());
-        add(btnProcessar, gbc);
+        panelBotoes.add(btnProcessar);
+
+        btnCadastrar = new JButton("Cadastrar Alimento");
+        btnCadastrar.setEnabled(false);
+        btnCadastrar.addActionListener(e -> cadastrarAlimentoDoRotulo());
+        panelBotoes.add(btnCadastrar);
+
+        add(panelBotoes, gbc);
 
         // Área de resultado
         gbc.gridy++;
@@ -102,8 +113,8 @@ public class LeituraRotuloPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
         JLabel obs = new JLabel(
-            "Dica: Para imagens, converta para PDF com OCR usando Google Drive, Adobe Scan ou ferramentas similares. " +
-            "O sistema extrairá o texto do PDF gerado."
+                "Dica: Para imagens, converta para PDF com OCR usando Google Drive, Adobe Scan ou ferramentas similares. "
+                + "O sistema extrairá o texto do PDF gerado."
         );
         obs.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         obs.setForeground(Color.GRAY);
@@ -114,7 +125,6 @@ public class LeituraRotuloPanel extends JPanel {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogTitle("Selecione o rótulo do alimento (PDF)");
-
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
                 "Arquivos PDF", "pdf"));
 
@@ -123,8 +133,8 @@ public class LeituraRotuloPanel extends JPanel {
             arquivoSelecionado = fileChooser.getSelectedFile();
             lblCaminhoArquivo.setText(arquivoSelecionado.getAbsolutePath());
             btnProcessar.setEnabled(true);
-            txtResultado.setText("Arquivo selecionado: " + arquivoSelecionado.getName() +
-                    "\n\nClique em 'Extrair Informações' para processar.");
+            txtResultado.setText("Arquivo selecionado: " + arquivoSelecionado.getName()
+                    + "\n\nClique em 'Extrair Informações' para processar.");
         }
     }
 
@@ -150,12 +160,57 @@ public class LeituraRotuloPanel extends JPanel {
             sb.append("DICA: Copie os valores para o cadastro do alimento.\n");
 
             txtResultado.setText(sb.toString());
+            btnCadastrar.setEnabled(true);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Erro ao processar o arquivo: " + e.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             txtResultado.setText("Erro: " + e.getMessage());
+        }
+    }
+
+    private void cadastrarAlimentoDoRotulo() {
+        try {
+            AlimentoDTO dto = controller.processarArquivoParaAlimento(arquivoSelecionado, arquivoSelecionado.getName());
+            AlimentoController alimentoController = new AlimentoController();
+            String resultado = "";
+
+            if (dto.getTipo() == TipoAlimento.RACAO) {
+                resultado = alimentoController.cadastrarRacao(
+                        dto.getNome(), dto.getFabricante(), dto.getCategoriaRacao(),
+                        dto.getUmidade(), dto.getProteinaBruta(), dto.getExtratoEtereo(),
+                        dto.getFibraBruta(), dto.getFda(), dto.getFdn(),
+                        dto.getMateriaMineralRacao(), dto.getCalcioRacao(), dto.getFosforoRacao(),
+                        dto.getSodioRacao(), dto.getEdDec(), dto.getPrecoPorKg()
+                );
+            } else if (dto.getTipo() == TipoAlimento.VOLUMOSO) {
+                resultado = alimentoController.cadastrarVolumoso(
+                        dto.getTipoVolumoso(), dto.getCategoriaVolumoso(),
+                        dto.getMateriaSeca(), dto.getProteinaVolumoso(),
+                        dto.getFdnVolumoso(), dto.getFdaVolumoso(),
+                        dto.getEdVolumoso(), dto.getRegiao(), dto.getPrecoPorKg()
+                );
+            } else if (dto.getTipo() == TipoAlimento.SUPLEMENTO) {
+                resultado = alimentoController.cadastrarSuplemento(
+                        dto.getNomeComercialSuplemento(), dto.getFabricanteSuplemento(),
+                        dto.getCategoriaSuplemento(), dto.getUnidadeRotulo(),
+                        dto.getDoseRecomendada(), dto.getDoseUsada(),
+                        dto.getEnergiaSuplemento(), dto.getProteinaSuplemento(),
+                        dto.getGordura(), dto.getCalcioSuplemento(), dto.getFosforoSuplemento(),
+                        dto.getSodioSuplemento(), dto.getPotassio(), dto.getMagnesio(),
+                        dto.getSelenio(), dto.getVitaminaE(), dto.getBiotina(),
+                        dto.getCalculoEnergetico(), dto.getPrecoPorKg()
+                );
+            }
+
+            JOptionPane.showMessageDialog(this, resultado, "Cadastro automático", JOptionPane.INFORMATION_MESSAGE); //remover resultad com referencia a banco de dados
+            if (mainFrame != null) {
+                mainFrame.atualizarDados();
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -45,15 +45,13 @@ public class AlimentoController {
             racao.setEdDec(edDec);
             racao.setEdEst(null);
             alimentoRepository.salvar(racao);
-            return "Ração cadastrada com sucesso! ID: " + racao.getId() 
-                    + " | ED Declarada: " + String.format("%.2f", edDec) + " Mcal/kg";
+            return "Ração cadastrada com sucesso! ID: " + " | ED Declarada: " + String.format("%.2f", edDec) + " Mcal/kg"; //removendo ID
         } else {
             // Calcula e usa a ED estimada pelo sistema
             double edEstimada = calcularEdRacao(proteinaBruta, extratoEtereo, fibraBruta, fdn);
             racao.setEdEst(edEstimada);
             alimentoRepository.salvar(racao);
-            return "Ração cadastrada com sucesso! ID: " + racao.getId() 
-                    + " | ED Estimada: " + String.format("%.2f", edEstimada) + " Mcal/kg";
+            return "Ração cadastrada com sucesso!" + " | ED Estimada: " + String.format("%.2f", edEstimada) + " Mcal/kg"; // removendo ID 
         }
     }
     

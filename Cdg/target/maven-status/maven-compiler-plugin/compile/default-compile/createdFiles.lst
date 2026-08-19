@@ -31,6 +31,7 @@ com/mycompany/domain/UnidadeSuplemento.class
 com/mycompany/domain/TipoVolumoso.class
 com/mycompany/ui/RelatorioVisitaPanel.class
 com/mycompany/controller/ConsumoController.class
+com/mycompany/domain/dto/AlimentoDTO.class
 com/mycompany/controller/RelatorioController.class
 com/mycompany/controller/AlimentoController.class
 com/mycompany/service/LeituraRotuloService.class
